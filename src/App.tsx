@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
+import { motion } from 'motion/react';
+import Hls from 'hls.js';
 import {
   Brain,
   MousePointerClick,
@@ -22,29 +24,154 @@ import {
   Twitter,
   Facebook,
   Youtube,
-  Instagram
+  Instagram,
+  GraduationCap,
+  Building2,
+  Rocket,
+  Headphones,
+  Layout,
+  Linkedin,
+  Github,
+  ChevronDown,
+  Users,
+  Folder,
+  MessageCircle,
+  Menu,
+  X
 } from 'lucide-react';
 
-const Navbar = () => (
-  <nav className="flex items-center justify-between py-6 px-8 max-w-7xl mx-auto">
-    <div className="flex items-center gap-2">
-      <span className="font-serif text-2xl font-bold tracking-tight">NovaSpace</span>
-    </div>
-    <div className="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
-      <a href="#" className="text-slate-900">Home</a>
-      <a href="#" className="hover:text-slate-900 transition-colors">Features</a>
-      <a href="#" className="hover:text-slate-900 transition-colors">About</a>
-    </div>
-    <div className="flex items-center gap-4">
-      <button className="text-sm font-medium text-slate-600 hover:text-slate-900 px-4 py-2 rounded-full border border-slate-200 hover:border-slate-300 transition-all">
-        Log In
-      </button>
-      <button className="text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 px-5 py-2 rounded-full transition-colors shadow-sm">
-        Sign Up
-      </button>
-    </div>
-  </nav>
-);
+const Navbar = () => {
+  const [isFeaturesOpen, setIsFeaturesOpen] = React.useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+
+  const featureLinks = [
+    { title: "AI Assistant", desc: "Smart tutoring, chat & adaptive learning", icon: Brain, isNew: true },
+    { title: "WorkSpace", desc: "Code & document workspace manager", icon: Folder, isNew: true },
+    { title: "Teams", desc: "Collaborate with team members", icon: Users, isNew: true },
+    { title: "Conferencing", desc: "HD virtual classrooms & meetings", icon: Video },
+    { title: "Live Chat", desc: "Real-time messaging & Q&A sessions", icon: MessageCircle }
+  ];
+
+  const mainLinks = [
+    { name: "Home", active: true },
+    { name: "Features", hasDropdown: true },
+    { name: "About" }
+  ];
+
+  return (
+    <>
+    <header className="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-[100] w-full max-w-[calc(100%-48px)] md:max-w-6xl px-0 pointer-events-none">
+      <nav className="backdrop-blur-xl bg-white/70 border border-white/40 rounded-3xl md:rounded-[2rem] px-5 md:px-10 py-2.5 md:py-4 flex items-center justify-between shadow-[0_8px_32px_rgba(0,0,0,0.06)] pointer-events-auto ring-1 ring-slate-900/5">
+        {/* Logo & Brand */}
+        <div className="flex items-center gap-2 shrink-0">
+          <div className="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center">
+            <Brain className="w-5 h-5 text-white" />
+          </div>
+          <span className="font-serif text-lg md:text-2xl font-bold tracking-tight text-slate-900">NovaSpace</span>
+        </div>
+        
+        {/* Desktop Nav Links */}
+        <div className="hidden md:flex items-center gap-12">
+          <a href="#" className="text-sm font-bold text-slate-900 border-b-2 border-slate-900 pb-0.5">Home</a>
+          <div 
+            className="relative"
+            onMouseEnter={() => setIsFeaturesOpen(true)}
+            onMouseLeave={() => setIsFeaturesOpen(false)}
+          >
+            <button className={`flex items-center gap-1 text-sm font-bold transition-all ${isFeaturesOpen ? 'text-slate-900' : 'text-slate-500 hover:text-slate-900'}`}>
+              Features <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${isFeaturesOpen ? 'rotate-180' : ''}`} />
+            </button>
+
+            <motion.div 
+              initial={false}
+              animate={isFeaturesOpen ? { opacity: 1, y: 0, scale: 1, display: 'block' } : { opacity: 0, y: 10, scale: 0.95, transitionEnd: { display: 'none' } }}
+              className="absolute top-full -left-1/2 pt-5 z-50 min-w-[340px]"
+            >
+              <div className="backdrop-blur-2xl bg-white/95 border border-white/50 rounded-[2.5rem] shadow-2xl p-6 relative ring-1 ring-slate-900/5">
+                <div className="space-y-1 relative">
+                  {featureLinks.map((link, i) => (
+                    <a key={i} href="#" className="flex items-start gap-4 p-4 rounded-3xl hover:bg-slate-50 transition-all group/item">
+                      <div className="w-11 h-11 rounded-2xl bg-white border border-slate-100 shadow-sm flex items-center justify-center group-hover/item:border-slate-900 group-hover/item:shadow-slate-50 transition-all shrink-0">
+                        <link.icon className="w-5 h-5 text-slate-900" strokeWidth={1.5} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between mb-0.5">
+                          <span className="font-bold text-sm text-slate-900">{link.title}</span>
+                          {link.isNew && <span className="text-[9px] font-bold text-white bg-slate-900 px-2.5 py-0.5 rounded-full">New</span>}
+                        </div>
+                        <p className="text-[11px] text-slate-500 leading-snug truncate group-hover/item:text-slate-900 transition-colors">{link.desc}</p>
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          </div>
+          <a href="#" className="text-sm font-bold text-slate-500 hover:text-slate-900 transition-colors">About</a>
+        </div>
+        
+        {/* Desktop & Mobile Actions */}
+        <div className="flex items-center gap-3 md:gap-8">
+          <a href="#" className="hidden sm:inline-block text-sm font-bold text-slate-900">Log in</a>
+          <button className="bg-slate-900 text-white px-5 md:px-8 py-2 md:py-3 rounded-2xl font-bold text-[12px] md:text-sm shadow-xl shadow-slate-200 hover:bg-black transition-all hover:scale-105 active:scale-95 whitespace-nowrap">
+            Sign up
+          </button>
+          <button 
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="md:hidden w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-900 hover:bg-slate-200 transition-colors shadow-sm"
+          >
+            {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+        </div>
+      </nav>
+    </header>
+
+      {/* Mobile Menu Overlay */}
+      <motion.div
+        initial={{ opacity: 0, y: -20, pointerEvents: 'none' }}
+        animate={isMobileMenuOpen ? { opacity: 1, y: 0, pointerEvents: 'auto' } : { opacity: 0, y: -20, pointerEvents: 'none' }}
+        className="fixed inset-0 z-[90] md:hidden px-4 pt-24"
+      >
+        <div className="backdrop-blur-3xl bg-white/95 border border-slate-100 rounded-[2.5rem] shadow-2xl p-6 overflow-hidden max-h-[80vh] overflow-y-auto">
+          <div className="space-y-6">
+            <div className="space-y-2">
+              <p className="text-[10px] font-bold text-slate-400 tracking-widest uppercase mb-4">Main Menu</p>
+              <a href="#" className="block p-4 rounded-2xl bg-slate-50 font-bold text-slate-900">Home</a>
+              <a href="#" className="block p-4 rounded-2xl hover:bg-slate-50 font-bold text-slate-900 transition-colors">About</a>
+            </div>
+            
+            <div className="space-y-4">
+              <p className="text-[10px] font-bold text-slate-400 tracking-widest uppercase mb-4">Features</p>
+              <div className="grid grid-cols-1 gap-2">
+                {featureLinks.map((link, i) => (
+                  <a key={i} href="#" className="flex items-center gap-4 p-4 rounded-2xl border border-slate-50 hover:bg-slate-50 transition-all">
+                    <div className="w-10 h-10 rounded-xl bg-white border border-slate-100 flex items-center justify-center shrink-0">
+                      <link.icon className="w-5 h-5 text-slate-900" strokeWidth={1.5} />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2 mb-0.5">
+                        <span className="font-bold text-sm text-slate-900">{link.title}</span>
+                        {link.isNew && <span className="text-[9px] font-bold text-white bg-slate-900 px-2 py-0.5 rounded-full">New</span>}
+                      </div>
+                      <p className="text-[11px] text-slate-500">{link.desc}</p>
+                    </div>
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            <div className="pt-6 border-t border-slate-100 flex flex-col gap-3">
+              <a href="#" className="block py-4 text-center font-bold text-slate-900">Log in</a>
+              <button className="w-full bg-slate-900 text-white py-4 rounded-2xl font-bold shadow-xl shadow-slate-100">
+                Get Started
+              </button>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+    </>
+  );
+};
 
 const Hero = () => (
   <section className="max-w-7xl mx-auto px-8 py-16 md:py-24 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -56,11 +183,11 @@ const Hero = () => (
         A unified AI-powered workspace for collaboration, live chat, conferencing, and multi-format document creation.
       </p>
       <div className="flex flex-wrap items-center gap-4">
-        <button className="text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-full transition-colors shadow-sm">
+        <button className="text-sm font-medium text-white bg-slate-900 hover:bg-black px-6 py-3 rounded-full transition-all shadow-sm">
           Get Started Free
         </button>
-        <button className="flex items-center gap-2 text-sm font-medium text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 px-6 py-3 rounded-full transition-colors shadow-sm">
-          <PlayCircle className="w-4 h-4 text-blue-600" />
+        <button className="flex items-center gap-2 text-sm font-medium text-slate-700 bg-white hover:bg-slate-50 border border-slate-200 px-6 py-3 rounded-full transition-all shadow-sm group">
+          <PlayCircle className="w-4 h-4 text-slate-900 group-hover:scale-110 transition-transform" />
           Watch Demo
         </button>
       </div>
@@ -83,74 +210,257 @@ const Hero = () => (
   </section>
 );
 
-const FeatureCard = ({ icon: Icon, title, description, badge, large = false }: any) => (
-  <div className={`bg-slate-50/80 border border-slate-200 rounded-2xl p-8 flex flex-col ${large ? 'h-full' : ''}`}>
-    <div className="flex justify-between items-start mb-6">
-      <div className="w-12 h-12 rounded-xl bg-white border border-slate-100 shadow-sm flex items-center justify-center">
-        <Icon className="w-6 h-6 text-slate-700" strokeWidth={1.5} />
+const SectionHeader = ({ badge, title, description, centered = true }: any) => (
+  <div className={`mb-16 ${centered ? 'text-center flex flex-col items-center' : ''}`}>
+    <motion.span 
+      initial={{ opacity: 0, y: 10 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      className="inline-flex items-center justify-center px-4 py-1 rounded-full bg-slate-50 text-slate-500 font-bold text-[10px] tracking-widest uppercase mb-6 border border-slate-100"
+    >
+      {badge}
+    </motion.span>
+    <h2 className="font-serif text-4xl md:text-5xl font-bold text-slate-900 mb-6 max-w-3xl leading-[1.1]">
+      {title}
+    </h2>
+    <p className="text-lg text-slate-500 max-w-2xl leading-relaxed">
+      {description}
+    </p>
+  </div>
+);
+
+const FeatureCard = ({ icon: Icon, title, description, badge, list, large = false }: any) => (
+  <motion.div 
+    initial={{ opacity: 0, y: 20 }}
+    whileInView={{ opacity: 1, y: 0 }}
+    viewport={{ once: true }}
+    className={`bg-white border border-slate-100 rounded-[2rem] p-8 flex flex-col shadow-sm hover:shadow-xl hover:shadow-slate-100/50 transition-all duration-500 group ${large ? 'md:col-span-2' : ''}`}
+  >
+    <div className="flex justify-between items-start mb-8">
+      <div className="w-14 h-14 rounded-2xl bg-white border border-slate-100 shadow-sm flex items-center justify-center group-hover:border-blue-100 group-hover:shadow-blue-50 transition-all duration-500">
+        <Icon className="w-7 h-7 text-slate-900" strokeWidth={1.2} />
       </div>
       {badge && (
-        <span className="text-[10px] font-bold tracking-wider uppercase text-slate-600 bg-slate-200/50 px-3 py-1 rounded-full">
+        <span className="text-[10px] font-bold tracking-widest uppercase text-slate-500 bg-slate-50 px-3 py-1 rounded-full border border-slate-100">
           {badge}
         </span>
       )}
     </div>
-    <h3 className="font-serif text-xl font-bold text-slate-900 mb-3">{title}</h3>
-    <p className="text-sm text-slate-600 mb-6 flex-grow leading-relaxed">{description}</p>
-    <a href="#" className="inline-flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-700 transition-colors mt-auto">
-      Learn more <ArrowRight className="w-4 h-4" />
+    <h3 className="font-serif text-2xl font-bold text-slate-900 mb-4">{title}</h3>
+    <p className="text-slate-500 mb-8 leading-relaxed text-sm font-medium">{description}</p>
+    
+    {list && (
+      <ul className="space-y-3 mb-8">
+        {list.map((item: string, i: number) => (
+          <li key={i} className="flex items-center gap-3 text-sm text-slate-600 font-medium">
+            <div className="w-5 h-5 rounded-full bg-slate-50 flex items-center justify-center">
+              <CheckCircle2 className="w-3 h-3 text-slate-900" />
+            </div>
+            {item}
+          </li>
+        ))}
+      </ul>
+    )}
+
+    <a href="#" className="inline-flex items-center gap-2 text-sm font-bold text-slate-900 hover:text-blue-600 transition-all mt-auto group-hover:gap-3">
+      View details <ArrowRight className="w-4 h-4" />
     </a>
-  </div>
+  </motion.div>
 );
 
-const Features = () => (
-  <section className="max-w-7xl mx-auto px-8 py-20">
-    <div className="mb-12">
-      <span className="text-sm font-medium text-slate-500 mb-2 block">Features</span>
-      <h2 className="font-serif text-4xl md:text-5xl font-bold text-slate-900 max-w-2xl leading-tight">
-        Everything You Need in One Intelligent Workspace
-      </h2>
-    </div>
+const FeaturesSection = () => (
+  <section className="max-w-7xl mx-auto px-8 py-32">
+    <SectionHeader 
+      badge="Features"
+      title="Everything You Need in One Intelligent Workspace"
+      description="Powerful features designed to supercharge your team's productivity and collaboration"
+    />
 
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
       <FeatureCard 
         icon={Brain}
         title="Smart AI Assistant"
-        description="A unified AI-powered workspace for collaboration, live chat, conferencing, and multi-format document creation."
+        description="Intelligent assistance powered by advanced AI to accelerate your workflow and decision making process."
         badge="AI-POWERED"
-        large={true}
       />
       <FeatureCard 
         icon={MousePointerClick}
         title="Real-Time Collaboration"
-        description="A unified AI-powered workspace for collaboration, live chat, conferencing, and multi-format document creation."
+        description="Work together seamlessly with your team from anywhere in the world with zero latency sync."
         badge="TEAM SYNC"
-        large={true}
       />
-    </div>
-
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
       <FeatureCard 
         icon={MessageSquare}
         title="Live Chat & Messaging"
-        description="Unified live chat & messaging, and chat, collaborate the messages."
+        description="Instant communication with powerful features for seamless team interaction and knowledge sharing."
+        badge="INSTANT"
       />
       <FeatureCard 
+        large
         icon={Video}
         title="Video Conferencing"
-        description="Video conferencing and pre-conversation with video conferencing."
+        description="Crystal-clear HD meetings with enterprise-grade features built in for global connectivity."
+        badge="HD QUALITY"
+        list={[
+          "Full HD video meetings",
+          "Screen & window sharing",
+          "Advanced host controls"
+        ]}
       />
+    </div>
+  </section>
+);
+
+const WorkspaceSection = () => (
+  <section className="max-w-7xl mx-auto px-8 py-32 bg-slate-50/50 rounded-[3rem]">
+    <SectionHeader 
+      badge="Workspace"
+      title="Create and Manage Work in Any Format"
+      description="Powerful multi-format workspace supporting all your favorite file types and languages"
+    />
+
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
       <FeatureCard 
         icon={FileText}
         title="Document Formats"
-        description="Document formats, with documents conferencing, and multi-format document."
+        description="Create and edit professional documents in multiple formats including PDF, DOCX, and MD."
         badge="DOCUMENTS"
       />
       <FeatureCard 
         icon={Code}
         title="Code & Scripts"
-        description="Code & scripts sensitive and comprehensive for in-app data and collaboration."
+        description="Write and manage code in all major programming languages with built-in syntax highlighting."
         badge="PROGRAMMING"
+      />
+      <FeatureCard 
+        icon={Database}
+        title="Data Formats"
+        description="Handle structured data with ease across various standard industry formats."
+        badge="DATA"
+        list={["JSON", "XML", "SQL", "YAML", "CSV"]}
+      />
+      <FeatureCard 
+        icon={Globe}
+        title="Web Development"
+        description="Build modern web applications with native support for the world's most popular frameworks."
+        badge="WEB"
+        list={["HTML", "CSS", "React", "Vue", "Angular"]}
+      />
+    </div>
+  </section>
+);
+
+const AIPoweredSection = () => (
+  <section className="max-w-7xl mx-auto px-8 py-32">
+    <SectionHeader 
+      badge="AI-Powered"
+      title="Intelligent AI That Works With You"
+      description="Advanced artificial intelligence built into every feature to accelerate your productivity and enhance collaboration"
+    />
+
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <FeatureCard 
+        icon={Code}
+        title="AI Coding Assistant"
+        description="Intelligent code generation and optimization."
+        badge="CODE AI"
+      />
+      <FeatureCard 
+        icon={Brain}
+        title="Smart Organization"
+        description="AI-driven workspace and folder intelligence."
+        badge="SMART AI"
+      />
+      <FeatureCard 
+        icon={FileText}
+        title="Content Generator"
+        description="Create professional content in seconds."
+        badge="CONTENT AI"
+      />
+      <FeatureCard 
+        icon={Database}
+        title="Powered Analytics"
+        description="Deep insights and recommendations."
+        badge="ANALYTICS AI"
+      />
+    </div>
+  </section>
+);
+
+const ForEveryoneSection = () => (
+  <section className="max-w-7xl mx-auto px-8 py-32 bg-slate-50/50 rounded-[3rem]">
+    <SectionHeader 
+      badge="For Everyone"
+      title="Built for Teams, Students & Enterprises"
+      description="Whether you're a solo developer, student team, or global enterprise, NovaSpace adapts to your workflow"
+    />
+
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <FeatureCard 
+        icon={GraduationCap}
+        title="Students & Educators"
+        description="Perfect for academic success and multi-format collaboration."
+        badge="ACADEMIC"
+      />
+      <FeatureCard 
+        icon={Code}
+        title="Developers & Engineers"
+        description="Built for software teams who want to move fast and stay organized."
+        badge="ENGINEERING"
+      />
+      <FeatureCard 
+        icon={Building2}
+        title="Teams & Enterprises"
+        description="Scale effortlessly with enterprise-level security and tools."
+        badge="CORPORATE"
+      />
+      <FeatureCard 
+        icon={Rocket}
+        title="Startups & Agencies"
+        description="Move fast and stay organized with agile collaboration tools."
+        badge="GROWTH"
+      />
+    </div>
+  </section>
+);
+
+const WhyChooseUsSection = () => (
+  <section className="max-w-7xl mx-auto px-8 py-32">
+    <SectionHeader 
+      badge="Why Choose Us"
+      title="Why Teams Choose NovaSpace"
+      description="Bank-level encryption and high-performance tools designed for the modern workspace"
+    />
+
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <FeatureCard 
+        icon={ShieldCheck}
+        title="Enterprise Security"
+        description="Bank-level encryption and compliance certifications across all platforms."
+      />
+      <FeatureCard 
+        icon={Clock}
+        title="24/7 Availability"
+        description="Work from anywhere, anytime with 99.9% guaranteed uptime."
+      />
+      <FeatureCard 
+        icon={Headphones}
+        title="Expert Support"
+        description="Dedicated support team ready to help you succeed 24/7."
+      />
+      <FeatureCard 
+        icon={Zap}
+        title="Lightning Fast"
+        description="Optimized performance for a smooth and responsive experience."
+      />
+      <FeatureCard 
+        icon={Target}
+        title="Scalable Growth"
+        description="From small teams to global organizations, we grow with you."
+      />
+      <FeatureCard 
+        icon={Layout}
+        title="Easy Integration"
+        description="Connect with your favorite tools seamlessly via our open API."
       />
     </div>
   </section>
@@ -169,28 +479,28 @@ const MachineLearning = () => (
       <div className="bg-slate-50/80 border border-slate-200 rounded-3xl p-10 flex flex-col items-center justify-center">
         <Brain className="w-20 h-20 text-slate-800 mb-12" strokeWidth={1} />
         
-        <div className="grid grid-cols-3 gap-4 w-full divide-x divide-slate-200">
+        <div className="grid grid-cols-3 gap-4 w-full divide-x divide-slate-200 text-slate-900">
           <div className="flex flex-col items-center text-center px-4">
-            <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mb-4">
-              <Zap className="w-5 h-5 text-blue-600" />
+            <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center mb-4">
+              <Zap className="w-5 h-5 text-slate-900" />
             </div>
-            <span className="text-2xl font-serif font-bold text-slate-900 mb-1">10x</span>
+            <span className="text-2xl font-serif font-bold mb-1">10x</span>
             <span className="text-xs text-slate-600 font-medium">Faster Code<br/>Generation</span>
           </div>
           
           <div className="flex flex-col items-center text-center px-4">
-            <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mb-4">
-              <Target className="w-5 h-5 text-blue-600" />
+            <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center mb-4">
+              <Target className="w-5 h-5 text-slate-900" />
             </div>
-            <span className="text-2xl font-serif font-bold text-slate-900 mb-1">95%</span>
+            <span className="text-2xl font-serif font-bold mb-1">95%</span>
             <span className="text-xs text-slate-600 font-medium">Accuracy<br/>Rate</span>
           </div>
           
           <div className="flex flex-col items-center text-center px-4">
-            <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center mb-4">
-              <Clock className="w-5 h-5 text-blue-600" />
+            <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center mb-4">
+              <Clock className="w-5 h-5 text-slate-900" />
             </div>
-            <span className="text-2xl font-serif font-bold text-slate-900 mb-1">5hrs</span>
+            <span className="text-2xl font-serif font-bold mb-1">5hrs</span>
             <span className="text-xs text-slate-600 font-medium">Saved Per<br/>Week</span>
           </div>
         </div>
@@ -280,54 +590,260 @@ const Security = () => (
   </section>
 );
 
+const VideoBackground = ({ hlsSrc, mp4Src }: { hlsSrc: string, mp4Src: string }) => {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    let hls: Hls | null = null;
+    const video = videoRef.current;
+    if (!video) return;
+
+    const playVideo = () => {
+      video.play().catch(() => {
+        // Fallback or mute-required play
+      });
+    };
+
+    if (Hls.isSupported()) {
+      hls = new Hls({
+        enableWorker: true,
+        lowLatencyMode: true,
+      });
+      hls.loadSource(hlsSrc);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, playVideo);
+      
+      // Explicit error handling for HLS
+      hls.on(Hls.Events.ERROR, (_, data) => {
+        if (data.fatal) {
+          console.error('HLS fatal error:', data.type);
+          hls?.destroy();
+          // Fallback to MP4 manually if HLS dies
+          video.src = mp4Src;
+          playVideo();
+        }
+      });
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      // Native Safari HLS
+      video.src = hlsSrc;
+      video.addEventListener('loadedmetadata', playVideo);
+    } else {
+      // Direct MP4 fallback for browsers without HLS support
+      video.src = mp4Src;
+      video.addEventListener('loadedmetadata', playVideo);
+    }
+
+    return () => {
+      hls?.destroy();
+      video.removeEventListener('loadedmetadata', playVideo);
+    };
+  }, [hlsSrc, mp4Src]);
+
+  return (
+    <video
+      ref={videoRef}
+      className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+      muted
+      loop
+      playsInline
+      controls={false}
+    />
+  );
+};
+
+const CTASection = () => {
+  // Use the ID provided. If HLS isn't explicitly known, try a common streaming pattern or just the MP4 as fallback.
+  const playbackId = "f0c78f536d5f21a047fb7792723a36f9d647daa1";
+  const hlsUrl = `/_videos/v1/${playbackId}.m3u8`;
+  const mp4Url = `/_videos/v1/${playbackId}`;
+
+  return (
+    <section className="max-w-7xl mx-auto px-8 py-24">
+      <div className="bg-slate-900 rounded-[3rem] px-8 py-24 text-center relative overflow-hidden shadow-2xl">
+        {/* Video Background Layer */}
+        <div className="absolute inset-0 z-0">
+          <div className="absolute inset-0 bg-black opacity-60 z-10" />
+          <VideoBackground hlsSrc={hlsUrl} mp4Src={mp4Url} />
+        </div>
+        
+        {/* Content Layer */}
+        <div className="relative z-20">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            className="inline-flex items-center gap-2 px-6 py-2 rounded-full bg-white/10 border border-white/20 text-white font-bold text-[10px] tracking-widest uppercase mb-10"
+          >
+            <Rocket className="w-3.5 h-3.5" />
+            Get Started Today
+          </motion.div>
+          
+          <h2 className="font-serif text-5xl md:text-7xl font-bold text-white mb-10 max-w-4xl mx-auto leading-[1.1] tracking-tight">
+            Ready to Transform Your Workspace?
+          </h2>
+          
+          <p className="text-xl text-slate-300 mb-14 max-w-2xl mx-auto leading-relaxed">
+            Join thousands of teams already using NovaSpace to collaborate smarter, work faster, and achieve more together.
+          </p>
+          
+          <button className="bg-white text-slate-950 px-12 py-5 rounded-2xl font-bold text-lg hover:bg-slate-100 transition-all flex items-center gap-2 mx-auto shadow-xl hover:scale-105 active:scale-95 group">
+            Get Started <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </button>
+        </div>
+
+        {/* Brand Glow Overlay (Top Layer) */}
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-[radial-gradient(circle_at_50%_0%,rgba(255,255,255,0.1),transparent_70%)] pointer-events-none z-30" />
+      </div>
+    </section>
+  );
+};
+
 const Footer = () => (
-  <footer className="max-w-7xl mx-auto px-8 py-12">
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
-      <div className="col-span-1">
-        <span className="font-serif text-2xl font-bold tracking-tight text-slate-900">NovaSpace</span>
+  <footer className="max-w-7xl mx-auto px-8 py-20">
+    <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 mb-20">
+      <div className="max-w-md">
+        <div className="flex items-center gap-2 mb-6">
+          <div className="w-10 h-10 rounded-xl bg-slate-900 flex items-center justify-center">
+            <Brain className="w-6 h-6 text-white" />
+          </div>
+          <span className="font-serif text-3xl font-bold tracking-tight text-slate-900">NovaSpace</span>
+        </div>
+        <p className="text-slate-500 mb-8 leading-relaxed font-medium">
+          Empowering teams with intelligent collaboration tools and AI-powered workspace solutions.
+        </p>
+        <div className="flex items-center gap-3">
+          {[
+            { icon: Linkedin, href: '#' },
+            { icon: Twitter, href: '#' },
+            { icon: Github, href: '#' },
+            { icon: Youtube, href: '#' }
+          ].map((social, i) => (
+            <a 
+              key={i} 
+              href={social.href} 
+              className="w-12 h-12 rounded-xl bg-white border border-slate-100 flex items-center justify-center text-slate-400 hover:text-slate-900 hover:border-slate-300 transition-all shadow-sm"
+            >
+              <social.icon className="w-5 h-5" />
+            </a>
+          ))}
+        </div>
       </div>
       
-      <div>
-        <h4 className="font-bold text-xs tracking-wider uppercase text-slate-900 mb-6">Platform</h4>
-        <ul className="space-y-4 text-sm text-slate-600">
-          <li><a href="#" className="hover:text-slate-900">About</a></li>
-          <li><a href="#" className="hover:text-slate-900">Features</a></li>
-          <li><a href="#" className="hover:text-slate-900">Nova Space</a></li>
-        </ul>
-      </div>
-      
-      <div>
-        <h4 className="font-bold text-xs tracking-wider uppercase text-slate-900 mb-6">Workspace</h4>
-        <ul className="space-y-4 text-sm text-slate-600">
-          <li><a href="#" className="hover:text-slate-900">Workspace</a></li>
-          <li><a href="#" className="hover:text-slate-900">Careers</a></li>
-          <li><a href="#" className="hover:text-slate-900">Contact</a></li>
-        </ul>
-      </div>
-      
-      <div>
-        <h4 className="font-bold text-xs tracking-wider uppercase text-slate-900 mb-6">AI & Tools</h4>
-        <ul className="space-y-4 text-sm text-slate-600">
-          <li><a href="#" className="hover:text-slate-900">AI Resources</a></li>
-          <li><a href="#" className="hover:text-slate-900">AI Stable Centers</a></li>
-          <li><a href="#" className="hover:text-slate-900">Privacy & Scripts</a></li>
-        </ul>
+      <div className="grid grid-cols-2 sm:grid-cols-3 gap-12">
+        <div>
+          <h4 className="font-bold text-xs tracking-widest uppercase text-slate-900 mb-8">Platform</h4>
+          <ul className="space-y-4 text-sm text-slate-500 font-medium">
+            <li><a href="#" className="hover:text-slate-900">Dashboard</a></li>
+            <li><a href="#" className="hover:text-slate-900">Projects</a></li>
+            <li><a href="#" className="hover:text-slate-900">Tasks</a></li>
+            <li><a href="#" className="hover:text-slate-900">Notebooks</a></li>
+            <li><a href="#" className="hover:text-slate-900">Calendar</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 className="font-bold text-xs tracking-widest uppercase text-slate-900 mb-8">Workspace</h4>
+          <ul className="space-y-4 text-sm text-slate-500 font-medium">
+            <li><a href="#" className="hover:text-slate-900">My Workspace</a></li>
+            <li><a href="#" className="hover:text-slate-900">Teams</a></li>
+            <li><a href="#" className="hover:text-slate-900">Team Workspace</a></li>
+            <li><a href="#" className="hover:text-slate-900">Team Projects</a></li>
+            <li><a href="#" className="hover:text-slate-900">Chat</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 className="font-bold text-xs tracking-widest uppercase text-slate-900 mb-8">AI & Tools</h4>
+          <ul className="space-y-4 text-sm text-slate-500 font-medium">
+            <li><a href="#" className="hover:text-slate-900">AI Assistant</a></li>
+            <li><a href="#" className="hover:text-slate-900">Apps</a></li>
+            <li><a href="#" className="hover:text-slate-900">Web Search</a></li>
+            <li><a href="#" className="hover:text-slate-900">Meeting</a></li>
+            <li><a href="#" className="hover:text-slate-900">About</a></li>
+          </ul>
+        </div>
       </div>
     </div>
     
-    <div className="flex flex-col md:flex-row items-center justify-between pt-8 border-t border-slate-200">
-      <p className="text-xs text-slate-500 mb-4 md:mb-0">
-        © 2024 NovaSpace. All rights reserved.
+    <div className="flex flex-col md:flex-row items-center justify-between pt-10 border-t border-slate-100">
+      <p className="text-sm text-slate-400 font-medium mb-4 md:mb-0">
+        © 2026 NovaSpace. All rights reserved.
       </p>
-      <div className="flex items-center gap-4 text-slate-400">
-        <a href="#" className="hover:text-slate-600"><Twitter className="w-4 h-4" /></a>
-        <a href="#" className="hover:text-slate-600"><Facebook className="w-4 h-4" /></a>
-        <a href="#" className="hover:text-slate-600"><Youtube className="w-4 h-4" /></a>
-        <a href="#" className="hover:text-slate-600"><Instagram className="w-4 h-4" /></a>
+      <div className="flex items-center gap-8 text-sm text-slate-400 font-medium">
+        <a href="#" className="hover:text-slate-900">Sitemap</a>
+        <a href="#" className="hover:text-slate-900">Accessibility</a>
+        <div className="flex items-center gap-2">
+          Made with <span className="text-red-500">❤️</span> in Ghana
+        </div>
       </div>
     </div>
   </footer>
 );
+
+
+const LogoTicker = () => {
+  const logos = [
+    { icon: Database, title: 'DataCore', subtitle: 'Analytics' },
+    { icon: Cloud, title: 'CloudSync', subtitle: 'Cloud Services' },
+    { icon: Shield, title: 'SecureNet', subtitle: 'Security' },
+    { icon: Code, title: 'DevBox', subtitle: 'Development' },
+    { icon: Zap, title: 'ApexLogic', subtitle: 'Automation' },
+    { icon: Globe, title: 'GlobalConnect', subtitle: 'Networking' },
+  ];
+
+  // Precise loop calculation: 280px width + 24px gap = 304px per item. 
+  // 6 original items * 304px = 1824px total width per set.
+  const duplicatedLogos = [...logos, ...logos, ...logos];
+
+  return (
+    <section className="py-24 overflow-hidden bg-white">
+      <div className="max-w-7xl mx-auto px-8 mb-20 flex flex-col items-center">
+        <motion.div 
+          initial={{ opacity: 0, y: 10 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          className="inline-flex items-center justify-center px-8 py-3 rounded-full bg-slate-900 text-white font-bold text-sm tracking-wide shadow-xl shadow-slate-200"
+        >
+          Trusted by Industry Leaders
+        </motion.div>
+      </div>
+
+      <div className="relative">
+        {/* Mirror faded edges for premium feel */}
+        <div className="absolute left-0 top-0 bottom-0 w-64 bg-gradient-to-r from-white via-white/80 to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-64 bg-gradient-to-l from-white via-white/80 to-transparent z-10 pointer-events-none" />
+        
+        <motion.div 
+          className="flex gap-6 whitespace-nowrap"
+          animate={{
+            x: [0, -1824],
+          }}
+          transition={{
+            x: {
+              repeat: Infinity,
+              repeatType: "loop",
+              duration: 40,
+              ease: "linear",
+            },
+          }}
+        >
+          {duplicatedLogos.map((logo, index) => (
+            <div 
+              key={index} 
+              className="flex items-center gap-6 bg-white border border-slate-100 rounded-[2rem] p-6 shadow-sm hover:shadow-md transition-shadow duration-300 min-w-[280px]"
+            >
+              <div className="w-16 h-16 rounded-2xl bg-white border border-slate-100 flex items-center justify-center shadow-sm">
+                <logo.icon className="w-8 h-8 text-slate-900" strokeWidth={1.2} />
+              </div>
+              <div className="flex flex-col">
+                <span className="font-serif text-xl font-bold text-slate-900 tracking-tight">{logo.title}</span>
+                <span className="text-sm text-slate-500 font-medium tracking-wide uppercase text-[10px]">{logo.subtitle}</span>
+              </div>
+            </div>
+          ))}
+        </motion.div>
+      </div>
+    </section>
+  );
+};
 
 export default function App() {
   return (
@@ -335,8 +851,14 @@ export default function App() {
       <Navbar />
       <main>
         <Hero />
-        <Features />
+        <LogoTicker />
+        <FeaturesSection />
+        <WorkspaceSection />
+        <AIPoweredSection />
         <MachineLearning />
+        <ForEveryoneSection />
+        <WhyChooseUsSection />
+        <CTASection />
         <Security />
       </main>
       <Footer />
