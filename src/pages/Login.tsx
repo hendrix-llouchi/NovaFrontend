@@ -9,9 +9,16 @@ import {
   Eye, 
   ArrowRight 
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    // In a real app, perform validation/API calls here
+    navigate('/dashboard');
+  };
   return (
     <div className="flex min-h-screen bg-white">
       {/* Left Side - Branding & Testimonial (Hidden on small screens) */}
@@ -132,7 +139,7 @@ const LoginPage = () => {
           </div>
 
           {/* Login Form */}
-          <form className="space-y-6">
+          <form onSubmit={handleLogin} className="space-y-6">
             <div className="space-y-2">
               <label className="text-[11px] font-bold text-slate-400 tracking-widest uppercase ml-1">Email Address</label>
               <div className="relative group">

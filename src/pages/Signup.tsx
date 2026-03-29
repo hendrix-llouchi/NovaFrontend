@@ -12,9 +12,16 @@ import {
   AtSign,
   ShieldCheck
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const SignupPage = () => {
+  const navigate = useNavigate();
+
+  const handleSignup = (e: React.FormEvent) => {
+    e.preventDefault();
+    // In a real app, perform validation/API calls here
+    navigate('/dashboard');
+  };
   return (
     <div className="flex min-h-screen bg-white">
       {/* Left Side - Branding & Testimonial (Hidden on small screens) */}
@@ -133,7 +140,7 @@ const SignupPage = () => {
           </div>
 
           {/* Signup Form */}
-          <form className="space-y-6">
+          <form onSubmit={handleSignup} className="space-y-6">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
                 <label className="text-[10px] font-bold text-slate-400 tracking-widest uppercase ml-1">First Name</label>

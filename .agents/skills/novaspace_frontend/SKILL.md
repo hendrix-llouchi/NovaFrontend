@@ -1,18 +1,26 @@
 ---
 name: NovaSpace Frontend Development
-description: Skill for developing and maintaining the NovaSpace AI-powered collaboration workspace landing page. Covers project structure, tech stack conventions, the definitive Black & White design system, glassmorphism patterns, component architecture, and development workflow.
+description: Skill for developing and maintaining the NovaSpace AI-powered collaboration workspace. Covers multi-page architecture, routing, tech stack conventions, the definitive Black & White design system, glassmorphism patterns, mobile responsiveness rules, component architecture, and development workflow.
 ---
 
 # NovaSpace Frontend Skill
 
 ## Project Summary
 
-**NovaSpace** is a modern, AI-powered collaboration workspace landing page. It is built with **React 19 + Vite 6** and TypeScript. The app is a single-page marketing/landing site with multiple sections: Navbar (glassmorphism), Hero, Logo Ticker, Features, Workspace, AI-Powered, Machine Learning, For Everyone, Why Choose Us, CTA (video background), Security, and a comprehensive multi-column Footer.
+**NovaSpace** is a modern, AI-powered collaboration workspace. It is built with **React 19 + Vite 6**, TypeScript, and **React Router DOM**. The app is a multi-page application with a landing site, authentication pages (Login, Signup), and a workspace Dashboard.
 
 - **Repository Root**: `c:\Users\PC\Downloads\Projects\NovaFrontend`
 - **Dev Server**: `http://localhost:3000` (run `npm run dev`)
-- **Entry Point**: `src/main.tsx` → `src/App.tsx`
+- **Entry Point**: `src/main.tsx` → `src/App.tsx` → React Router routes
 - **Active Branch**: `feature/homepage`
+
+### Pages & Routes
+| Route | File | Description |
+|---|---|---|
+| `/` | `src/pages/Home.tsx` | Landing page with all marketing sections |
+| `/login` | `src/pages/Login.tsx` | Split-screen login with social auth |
+| `/signup` | `src/pages/Signup.tsx` | Split-screen registration with MFA toggle |
+| `/dashboard` | `src/pages/Dashboard.tsx` | Authenticated workspace dashboard |
 
 ---
 
@@ -37,17 +45,23 @@ description: Skill for developing and maintaining the NovaSpace AI-powered colla
 ```
 NovaFrontend/
 ├── src/
-│   ├── App.tsx          # All UI components and page assembly (single file currently)
-│   ├── index.css        # Global styles, Tailwind import, theme tokens
-│   └── main.tsx         # React root mount
-├── index.html           # HTML shell
-├── vite.config.ts       # Vite config (Tailwind plugin, path alias, env)
-├── tsconfig.json        # TypeScript config
-├── package.json         # Dependencies & scripts
-└── .env.example         # Env variable template
+│   ├── App.tsx                         # Root routing (BrowserRouter + Routes)
+│   ├── index.css                       # Global styles, Tailwind import, theme tokens
+│   ├── main.tsx                        # React root mount
+│   ├── pages/
+│   │   ├── Home.tsx                    # Landing page
+│   │   ├── Login.tsx                   # Login page
+│   │   ├── Signup.tsx                  # Signup page
+│   │   └── Dashboard.tsx               # Workspace dashboard
+│   └── components/
+│       └── layout/
+│           └── Navbar.tsx              # Shared glassmorphic navbar (used on Home)
+├── index.html
+├── vite.config.ts
+├── tsconfig.json
+├── package.json
+└── .env.example
 ```
-
-> ⚠️ **Note**: Currently all React components live in `src/App.tsx`. When adding new features, prefer extracting them into `src/components/` to keep the codebase maintainable.
 
 ---
 
@@ -297,11 +311,73 @@ NovaSpace follows a **clean, editorial, premium minimalist** design:
 
 ---
 
+## 📱 Mobile Responsiveness — MANDATORY
+
+Every page and component **must** be fully responsive, from 320px (small phone) up to 1920px+ (large monitor). This is a non-negotiable requirement.
+
+### Responsive Breakpoint Strategy
+
+| Breakpoint | Tailwind Prefix | Target Devices |
+|---|---|---|
+| `<640px` | (default/mobile-first) | Small phones (320–639px) |
+| `≥640px` | `sm:` | Large phones & small tablets |
+| `≥768px` | `md:` | Tablets |
+| `≥1024px` | `lg:` | Laptops |
+| `≥1280px` | `xl:` | Desktops |
+| `≥1536px` | `2xl:` | Large monitors |
+
+### Mobile-First Rules
+
+1. **Always write styles mobile-first.** Start with the smallest screen and layer upward using responsive prefixes.
+2. **Never use fixed pixel widths** on containers. Use `w-full`, `max-w-*`, and `flex-1` instead.
+3. **Grid columns must collapse on mobile:**
+   - 4-col grids → `grid-cols-1 sm:grid-cols-2 lg:grid-cols-4`
+   - 3-col grids → `grid-cols-1 md:grid-cols-3`
+   - 2-col grids → `grid-cols-1 md:grid-cols-2`
+4. **Typography must scale down on mobile:**
+   - `text-3xl md:text-5xl` for section headings
+   - `text-xl md:text-3xl` for card titles
+5. **Hide non-essential desktop elements on mobile** using `hidden md:flex` or `hidden lg:block`.
+6. **All paddings and margins must be smaller on mobile:**
+   - Sections: `p-6 md:p-12`
+   - Cards: `p-5 md:p-8`
+7. **Touch targets must be at least 44×44px**: All tappable elements (buttons, nav links, icons) must be comfortably tappable.
+8. **Text must never truncate or overflow** on narrow screens. Use `truncate`, `break-words`, or `min-w-0` on flex children as needed.
+
+### Dashboard Sidebar Pattern (Collapsible)
+
+The dashboard uses a collapsible sidebar controlled by a `useState` boolean:
+
+```tsx
+const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+
+// Sidebar: uses AnimatePresence + motion.aside for slide-in/out
+// On mobile: renders as an overlay with a backdrop blur
+// On desktop (lg+): renders inline, pushing main content
+
+// Main content adjusts padding dynamically:
+<main className={`transition-all duration-500 pt-32 ${isSidebarOpen ? 'lg:pl-72' : 'pl-0'}`}>
+```
+
+- Mobile: sidebar is an **overlay** on top of content (with `z-[200]` and backdrop `z-[150]`)
+- Desktop: sidebar **pushes** the main content to the right (`lg:pl-72`)
+- The toggle button (`<Menu />` icon) must always be visible in the header
+
+### Auth Pages (Login / Signup) Responsive Pattern
+
+- **Desktop (lg+):** Split-screen layout — 45% dark branding panel left, 55% form right
+- **Mobile:** The dark panel is completely hidden (`hidden lg:flex`). Only the form is shown, with the brand logo shown at the top of the form instead.
+- Form containers must be `w-full max-w-[420px]` (login) or `max-w-[500px]` (signup) and centered.
+
+---
+
 ## Known Patterns & Gotchas
 
 - **HMR**: Hot Module Replacement is conditionally disabled via `DISABLE_HMR=true` env var (for AI Studio). Do not modify the HMR config in `vite.config.ts`.
 - **Tailwind v4 vs v3**: This project uses **Tailwind v4** — many v3 guides will be wrong. There is no `purge`, no `content` array, no `tailwind.config.js`. Configuration is entirely CSS-first via `@theme` in `src/index.css`.
 - **`react-dom` is `^19.0.0`**: Ensure any third-party component libraries are React 19 compatible before installing.
-- **All components currently in one file**: `src/App.tsx` is large. As the project grows, extract components into `src/components/`.
+- **Routing**: This project uses `react-router-dom`. All navigation must use `<Link to="...">` or `useNavigate()`. Never use `<a href>` for internal navigation.
 - **Navbar is `fixed` positioned**: Remember to add `pt-24` or equivalent top-padding to the `<main>` element or the first section if content gets hidden behind the nav.
+- **Dashboard Navbar**: The dashboard uses a floating capsule nav (same design as Home) that dynamically adjusts its left position based on sidebar state.
 - **Design Drift**: The #1 risk on this project. When in doubt, refer to the Design System rules in this file — especially the colour palette. Blue/purple/any colour = WRONG.
+- **Missing Icon Imports**: Always double-check that every Lucide icon used in JSX is included in the import statement. Missing imports cause silent blank screens.
