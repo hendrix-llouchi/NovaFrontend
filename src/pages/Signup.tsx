@@ -7,11 +7,14 @@ import {
   Mail, 
   Lock, 
   Eye, 
-  ArrowRight 
+  ArrowRight,
+  User,
+  AtSign,
+  ShieldCheck
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-const LoginPage = () => {
+const SignupPage = () => {
   return (
     <div className="flex min-h-screen bg-white">
       {/* Left Side - Branding & Testimonial (Hidden on small screens) */}
@@ -65,7 +68,6 @@ const LoginPage = () => {
           </p>
           <div className="flex items-center gap-4">
             <div className="w-12 h-12 rounded-full bg-slate-800 border border-white/10 flex items-center justify-center overflow-hidden">
-               {/* Avatar Placeholder */}
                <div className="w-full h-full bg-gradient-to-br from-slate-700 to-slate-900" />
             </div>
             <div>
@@ -76,9 +78,9 @@ const LoginPage = () => {
         </motion.div>
       </div>
 
-      {/* Right Side - Login Form */}
+      {/* Right Side - Signup Form */}
       <div className="flex-1 flex flex-col items-center justify-start px-6 pt-20 lg:pt-32 pb-12 lg:px-24 overflow-y-auto">
-        <div className="w-full max-w-[420px]">
+        <div className="w-full max-w-[500px]">
           {/* Header Mobile Logo */}
           <div className="flex lg:hidden justify-center mb-8">
             <Link to="/" className="flex items-center gap-2">
@@ -91,23 +93,22 @@ const LoginPage = () => {
 
           {/* Toggle Tabs */}
           <div className="flex items-center gap-1 p-1 bg-slate-50 border border-slate-100 rounded-2xl mb-10">
-            <button className="flex-1 py-2.5 rounded-xl bg-white text-slate-900 font-bold text-sm shadow-sm ring-1 ring-slate-900/5">
+            <Link to="/login" className="flex-1 py-2.5 rounded-xl text-slate-500 hover:text-slate-900 font-bold text-sm transition-colors text-center">
               Log In
-            </button>
-            <Link to="/signup" className="flex-1 py-2.5 rounded-xl text-slate-500 hover:text-slate-900 font-bold text-sm transition-colors text-center">
-              Sign Up
             </Link>
+            <button className="flex-1 py-2.5 rounded-xl bg-white text-slate-900 font-bold text-sm shadow-sm ring-1 ring-slate-900/5">
+              Sign Up
+            </button>
           </div>
 
           <div className="mb-10 text-center lg:text-left">
-            <h2 className="font-serif text-3xl font-bold text-slate-900 mb-2">Welcome back</h2>
-            <p className="text-slate-500 text-sm">Enter your credentials to access your workspace</p>
+            <h2 className="font-serif text-3xl font-bold text-slate-900 mb-2">Create your account</h2>
+            <p className="text-slate-500 text-sm">Get started with NovaSpace today</p>
           </div>
 
           {/* Social Logins */}
           <div className="grid grid-cols-2 gap-4 mb-8">
             <button className="flex items-center justify-center gap-2 py-3.5 px-4 rounded-2xl border border-slate-200 hover:bg-slate-50 transition-all font-bold text-sm text-slate-700">
-               {/* Google SVG is harder to copy, so I'll use common icons or simpler shapes */}
                <svg className="w-4 h-4" viewBox="0 0 24 24">
                   <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                   <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -131,51 +132,106 @@ const LoginPage = () => {
             </div>
           </div>
 
-          {/* Login Form */}
+          {/* Signup Form */}
           <form className="space-y-6">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold text-slate-400 tracking-widest uppercase ml-1">First Name</label>
+                <div className="relative group">
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-slate-900 transition-colors" />
+                  <input 
+                    type="text" 
+                    placeholder="John"
+                    className="w-full pl-11 pr-4 py-3.5 rounded-2xl border border-slate-100 bg-slate-50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-950 transition-all text-sm"
+                  />
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold text-slate-400 tracking-widest uppercase ml-1">Last Name</label>
+                <div className="relative group">
+                  <User className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-slate-900 transition-colors" />
+                  <input 
+                    type="text" 
+                    placeholder="Doe"
+                    className="w-full pl-11 pr-4 py-3.5 rounded-2xl border border-slate-100 bg-slate-50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-950 transition-all text-sm"
+                  />
+                </div>
+              </div>
+            </div>
+
             <div className="space-y-2">
-              <label className="text-[11px] font-bold text-slate-400 tracking-widest uppercase ml-1">Email Address</label>
+              <label className="text-[10px] font-bold text-slate-400 tracking-widest uppercase ml-1">Username</label>
+              <div className="relative group">
+                <AtSign className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-slate-900 transition-colors" />
+                <input 
+                  type="text" 
+                  placeholder="johndoe"
+                  className="w-full pl-11 pr-4 py-3.5 rounded-2xl border border-slate-100 bg-slate-50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-950 transition-all text-sm"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-[10px] font-bold text-slate-400 tracking-widest uppercase ml-1">Email Address</label>
               <div className="relative group">
                 <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-slate-900 transition-colors" />
                 <input 
                   type="email" 
                   placeholder="you@example.com"
-                  className="w-full pl-11 pr-4 py-4 rounded-2xl border border-slate-100 bg-slate-50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-950 focus:border-slate-950 transition-all text-sm"
+                  className="w-full pl-11 pr-4 py-3.5 rounded-2xl border border-slate-100 bg-slate-50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-950 transition-all text-sm"
                 />
               </div>
             </div>
 
-            <div className="space-y-2">
-              <label className="text-[11px] font-bold text-slate-400 tracking-widest uppercase ml-1">Password</label>
-              <div className="relative group">
-                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-slate-900 transition-colors" />
-                <input 
-                  type="password" 
-                  placeholder="Enter your password"
-                  className="w-full pl-11 pr-12 py-4 rounded-2xl border border-slate-100 bg-slate-50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-950 focus:border-slate-950 transition-all text-sm"
-                />
-                <button type="button" className="absolute right-4 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-900 transition-colors">
-                  <Eye className="w-4 h-4" />
-                </button>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold text-slate-400 tracking-widest uppercase ml-1">Password</label>
+                <div className="relative group">
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-slate-900 transition-colors" />
+                  <input 
+                    type="password" 
+                    placeholder="Create password"
+                    className="w-full pl-11 pr-11 py-3.5 rounded-2xl border border-slate-100 bg-slate-50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-950 transition-all text-sm"
+                  />
+                  <button type="button" className="absolute right-4 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-900 transition-colors">
+                    <Eye className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+              <div className="space-y-2">
+                <label className="text-[10px] font-bold text-slate-400 tracking-widest uppercase ml-1">Confirm Password</label>
+                <div className="relative group">
+                  <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 group-focus-within:text-slate-900 transition-colors" />
+                  <input 
+                    type="password" 
+                    placeholder="Repeat password"
+                    className="w-full pl-11 pr-11 py-3.5 rounded-2xl border border-slate-100 bg-slate-50 focus:bg-white focus:outline-none focus:ring-1 focus:ring-slate-950 transition-all text-sm"
+                  />
+                  <button type="button" className="absolute right-4 top-1/2 -translate-y-1/2 p-1 text-slate-400 hover:text-slate-900 transition-colors">
+                    <Eye className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
             </div>
 
-            <div className="flex items-center justify-between">
-              <label className="flex items-center gap-2 cursor-pointer group">
-                <input type="checkbox" className="w-4 h-4 rounded border-slate-200 text-slate-950 focus:ring-slate-950" />
-                <span className="text-sm font-medium text-slate-600 group-hover:text-slate-900 transition-colors">Remember me</span>
+            <div className="flex items-center gap-3 py-2">
+              <label className="relative flex items-center cursor-pointer group">
+                <input type="checkbox" className="w-5 h-5 rounded border-slate-200 text-slate-950 focus:ring-slate-950" />
               </label>
-              <a href="#" className="text-sm font-bold text-slate-950 hover:underline">Forgot password?</a>
+              <div className="flex items-center gap-2">
+                <ShieldCheck className="w-4 h-4 text-slate-900" />
+                <span className="text-sm font-bold text-slate-700">Enable Two-Factor Authentication (MFA)</span>
+              </div>
             </div>
 
-            <button className="w-full bg-slate-950 text-white flex items-center justify-center gap-2 py-4 rounded-2xl font-bold shadow-xl shadow-slate-100 hover:bg-black transition-all hover:scale-[1.01] active:scale-[0.99]">
-              Log In
+            <button className="w-full bg-slate-950 text-white flex items-center justify-center gap-2 py-4 rounded-2xl font-bold shadow-xl shadow-slate-100 hover:bg-black transition-all hover:scale-[1.01] active:scale-[0.99] mt-6">
+              Create Account
               <ArrowRight className="w-4 h-4" />
             </button>
           </form>
 
           <p className="mt-8 text-center text-sm text-slate-500">
-            Don't have an account? <Link to="/signup" className="font-bold text-slate-950 hover:underline">Sign up</Link>
+            Already have an account? <Link to="/login" className="font-bold text-slate-950 hover:underline">Log in</Link>
           </p>
 
           <p className="mt-12 text-center text-[10px] text-slate-300 px-6">
@@ -187,4 +243,4 @@ const LoginPage = () => {
   );
 };
 
-export default LoginPage;
+export default SignupPage;
