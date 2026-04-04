@@ -32,6 +32,7 @@ import {
   Layout
 } from 'lucide-react';
 import Navbar from '../components/layout/Navbar';
+import { Link } from 'react-router-dom';
 
 const Hero = () => (
   <section className="max-w-7xl mx-auto px-8 py-32 md:py-48 grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -563,26 +564,37 @@ const Footer = () => (
       </div>
       
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-12">
+        {/* Platform */}
         <div>
           <h4 className="font-bold text-xs tracking-widest uppercase text-slate-900 mb-8">Platform</h4>
           <ul className="space-y-4 text-sm text-slate-500 font-medium">
-            <li><a href="#" className="hover:text-slate-900">Dashboard</a></li>
-            <li><a href="#" className="hover:text-slate-900">Projects</a></li>
-            <li><a href="#" className="hover:text-slate-900">Tasks</a></li>
-            <li><a href="#" className="hover:text-slate-900">Notebooks</a></li>
+            <li><Link to="/dashboard" className="hover:text-slate-900 transition-colors">Dashboard</Link></li>
+            <li><a href="#" className="hover:text-slate-900 transition-colors">Projects</a></li>
+            <li><a href="#" className="hover:text-slate-900 transition-colors">Tasks</a></li>
+            <li><a href="#" className="hover:text-slate-900 transition-colors">Notebooks</a></li>
+            <li><a href="#" className="hover:text-slate-900 transition-colors">Calendar</a></li>
           </ul>
         </div>
+        {/* Workspace */}
         <div>
           <h4 className="font-bold text-xs tracking-widest uppercase text-slate-900 mb-8">Workspace</h4>
           <ul className="space-y-4 text-sm text-slate-500 font-medium">
-            <li><a href="#" className="hover:text-slate-900">Teams</a></li>
-            <li><a href="#" className="hover:text-slate-900">Chat</a></li>
+            <li><a href="#" className="hover:text-slate-900 transition-colors">My Workspace</a></li>
+            <li><a href="#" className="hover:text-slate-900 transition-colors">Teams</a></li>
+            <li><a href="#" className="hover:text-slate-900 transition-colors">Team Workspace</a></li>
+            <li><a href="#" className="hover:text-slate-900 transition-colors">Team Projects</a></li>
+            <li><a href="#" className="hover:text-slate-900 transition-colors">Chat</a></li>
           </ul>
         </div>
+        {/* AI & Tools */}
         <div>
-          <h4 className="font-bold text-xs tracking-widest uppercase text-slate-900 mb-8">AI</h4>
+          <h4 className="font-bold text-xs tracking-widest uppercase text-slate-900 mb-8">AI & Tools</h4>
           <ul className="space-y-4 text-sm text-slate-500 font-medium">
-            <li><a href="#" className="hover:text-slate-900">Assistant</a></li>
+            <li><a href="#" className="hover:text-slate-900 transition-colors">AI Assistant</a></li>
+            <li><a href="#" className="hover:text-slate-900 transition-colors">Apps</a></li>
+            <li><Link to="/web-search" className="hover:text-slate-900 transition-colors">Web Search</Link></li>
+            <li><a href="#" className="hover:text-slate-900 transition-colors">Meeting</a></li>
+            <li><Link to="/about" className="hover:text-slate-900 transition-colors">About</Link></li>
           </ul>
         </div>
       </div>

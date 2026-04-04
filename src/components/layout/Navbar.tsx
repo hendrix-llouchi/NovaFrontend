@@ -30,10 +30,10 @@ const Navbar = () => {
       <nav className="backdrop-blur-xl bg-white/70 border border-white/40 rounded-3xl md:rounded-[2rem] px-5 md:px-10 py-2.5 md:py-4 flex items-center justify-between shadow-[0_8px_32px_rgba(0,0,0,0.06)] pointer-events-auto ring-1 ring-slate-900/5">
         {/* Logo & Brand */}
         <Link to="/" className="flex items-center gap-2 shrink-0">
-          <div className="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center">
+          <div className="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center shrink-0">
             <Brain className="w-5 h-5 text-white" />
           </div>
-          <span className="font-serif text-lg md:text-2xl font-bold tracking-tight text-slate-900">NovaSpace</span>
+          <span className="hidden sm:inline font-serif text-lg md:text-2xl font-bold tracking-tight text-slate-900">NovaSpace</span>
         </Link>
         
         {/* Desktop Nav Links */}
@@ -73,20 +73,20 @@ const Navbar = () => {
               </div>
             </motion.div>
           </div>
-          <a href="#" className="text-sm font-bold text-slate-500 hover:text-slate-900 transition-colors">About</a>
+          <Link to="/about" className="text-sm font-bold text-slate-500 hover:text-slate-900 transition-colors">About</Link>
         </div>
         
         {/* Desktop & Mobile Actions */}
-        <div className="flex items-center gap-3 md:gap-8">
+        <div className="flex items-center gap-2 md:gap-8">
           <Link to="/login" className="hidden sm:inline-block text-sm font-bold text-slate-900 hover:text-slate-500 transition-colors">Log in</Link>
-          <Link to="/signup" className="bg-slate-900 text-white px-5 md:px-8 py-2 md:py-3 rounded-2xl font-bold text-[12px] md:text-sm shadow-xl shadow-slate-200 hover:bg-black transition-all hover:scale-105 active:scale-95 whitespace-nowrap">
+          <Link to="/signup" className="bg-slate-900 text-white px-4 md:px-8 py-2 md:py-3 rounded-2xl font-bold text-[11px] md:text-sm shadow-xl shadow-slate-200 hover:bg-black transition-all hover:scale-105 active:scale-95 whitespace-nowrap">
             Sign up
           </Link>
           <button 
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="md:hidden w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-900 hover:bg-slate-200 transition-colors shadow-sm"
+            className="md:hidden w-9 h-9 rounded-xl bg-slate-100 flex items-center justify-center text-slate-900 hover:bg-slate-200 transition-colors shadow-sm"
           >
-            {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            {isMobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
           </button>
         </div>
       </nav>
@@ -103,7 +103,7 @@ const Navbar = () => {
             <div className="space-y-2">
               <p className="text-[10px] font-bold text-slate-400 tracking-widest uppercase mb-4">Main Menu</p>
               <Link to="/" onClick={() => setIsMobileMenuOpen(false)} className="block p-4 rounded-2xl bg-slate-50 font-bold text-slate-900">Home</Link>
-              <a href="#" className="block p-4 rounded-2xl hover:bg-slate-50 font-bold text-slate-900 transition-colors">About</a>
+              <Link to="/about" onClick={() => setIsMobileMenuOpen(false)} className="block p-4 rounded-2xl hover:bg-slate-50 font-bold text-slate-900 transition-colors">About</Link>
             </div>
             
             <div className="space-y-4">

@@ -25,8 +25,8 @@ import { Link } from 'react-router-dom';
 const Sidebar = ({ isOpen, toggle }: { isOpen: boolean, toggle: () => void }) => {
   const menuItems = [
     { section: 'MAIN', items: [
-      { name: 'Dashboard', icon: LayoutDashboard, active: true },
-      { name: 'My Tasks', icon: CheckSquare },
+      { name: 'Dashboard', icon: LayoutDashboard, active: true, to: '/dashboard' },
+      { name: 'My Tasks', icon: CheckSquare, to: '/tasks' },
       { name: 'Projects', icon: FolderKanban },
       { name: 'Calendar', icon: Calendar },
     ]},
@@ -81,20 +81,22 @@ const Sidebar = ({ isOpen, toggle }: { isOpen: boolean, toggle: () => void }) =>
               {menuItems.map((sec, i) => (
                 <div key={i} className="space-y-2">
                   <h3 className="text-[10px] font-bold text-slate-400 tracking-widest uppercase px-3 mb-4">{sec.section}</h3>
-                  {sec.items.map((item, j) => (
-                    <a 
-                      key={j} 
-                      href="#" 
-                      className={`flex items-center justify-between p-3 rounded-2xl transition-all group ${item.active ? 'bg-slate-50 text-slate-950' : 'text-slate-500 hover:bg-slate-50/50 hover:text-slate-950'}`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <item.icon className={`w-5 h-5 ${item.active ? 'text-slate-950' : 'text-slate-400 group-hover:text-slate-950'}`} strokeWidth={1.5} />
-                        <span className="text-sm font-bold">{item.name}</span>
-                      </div>
-                      {item.badge && <span className="bg-slate-950 text-white text-[9px] font-bold px-2 py-0.5 rounded-full">{item.badge}</span>}
-                      {item.count && <span className="bg-black text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full">{item.count}</span>}
-                    </a>
-                  ))}
+                  {sec.items.map((item, j) => {
+                    const className = `flex items-center justify-between p-3 rounded-2xl transition-all group ${item.active ? 'bg-slate-50 text-slate-950' : 'text-slate-500 hover:bg-slate-50/50 hover:text-slate-950'}`;
+                    const inner = (
+                      <>
+                        <div className="flex items-center gap-3">
+                          <item.icon className={`w-5 h-5 ${item.active ? 'text-slate-950' : 'text-slate-400 group-hover:text-slate-950'}`} strokeWidth={1.5} />
+                          <span className="text-sm font-bold">{item.name}</span>
+                        </div>
+                        {item.badge && <span className="bg-slate-950 text-white text-[9px] font-bold px-2 py-0.5 rounded-full">{item.badge}</span>}
+                        {item.count && <span className="bg-black text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full">{item.count}</span>}
+                      </>
+                    );
+                    return item.to
+                      ? <Link key={j} to={item.to} className={className}>{inner}</Link>
+                      : <a key={j} href="#" className={className}>{inner}</a>;
+                  })}
                 </div>
               ))}
             </nav>
