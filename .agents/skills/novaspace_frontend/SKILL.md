@@ -5,6 +5,12 @@ description: Skill for developing and maintaining the NovaSpace AI-powered colla
 
 # NovaSpace Frontend Skill
 
+## CRITICAL COMMIT & PUSH RULES
+**UNDER NO CIRCUMSTANCES DOES AI HAVE PERMISSION TO PUSH TO MAIN OR ANY OTHER BRANCH AHEAD OF USER APPROVAL.**
+1. You may stage and commit files locally as a batch if it makes logical sense.
+2. YOU MUST NEVER RUN `git push` UNLESS THE USER EXPLICITLY COMMANDS YOU TO PUSH IN THE PROMPT.
+3. If a user says "let it follow the design system", "that's it", or "moving on", THIS IS NOT PERMISSION TO PUSH. ONLY push if you see the explicit word "push".
+
 ## Project Summary
 
 **NovaSpace** is a modern, AI-powered collaboration workspace. It is built with **React 19 + Vite 6**, TypeScript, and **React Router DOM**. The app is a multi-page application with a landing site, authentication pages (Login, Signup), and a workspace Dashboard.
