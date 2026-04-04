@@ -49,7 +49,7 @@ const LeftSidebar = ({ isOpen, toggle }: { isOpen: boolean; toggle: () => void }
     { name: 'Tasks', icon: CheckSquare, to: '/tasks' },
     { name: 'Projects', icon: FolderKanban, to: '/projects' },
     { name: 'Workspace', icon: Layers, active: true, to: '/workspace' },
-    { name: 'Calendar', icon: Calendar, to: '#' },
+    { name: 'Calendar', icon: Calendar, to: '/calendar' },
   ];
 
   const fileTypes = [

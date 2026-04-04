@@ -71,7 +71,7 @@ const Sidebar = ({ isOpen, toggle, onAddTask }: { isOpen: boolean; toggle: () =>
     { name: 'Dashboard', icon: LayoutDashboard, to: '/dashboard' },
     { name: 'My Tasks', icon: CheckSquare, active: true, to: '/tasks' },
     { name: 'Projects', icon: FolderKanban, to: '/projects' },
-    { name: 'Calendar', icon: Calendar, to: '#' },
+    { name: 'Calendar', icon: Calendar, to: '/calendar' },
   ];
 
   return (

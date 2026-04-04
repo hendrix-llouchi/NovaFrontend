@@ -28,7 +28,7 @@ const Sidebar = ({ isOpen, toggle }: { isOpen: boolean, toggle: () => void }) =>
       { name: 'Dashboard', icon: LayoutDashboard, active: true, to: '/dashboard' },
       { name: 'My Tasks', icon: CheckSquare, to: '/tasks' },
       { name: 'Projects', icon: FolderKanban, to: '/projects' },
-      { name: 'Calendar', icon: Calendar },
+      { name: 'Calendar', icon: Calendar, to: '/calendar' },
     ]},
     { section: 'COLLABORATION', items: [
       { name: 'Conferencing', icon: Video, badge: 'NEW' },

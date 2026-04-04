@@ -9,6 +9,7 @@ import WebSearch from './pages/WebSearch';
 import Tasks from './pages/Tasks';
 import Projects from './pages/Projects';
 import Workspace from './pages/Workspace';
+import Calendar from './pages/Calendar';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/tasks" element={<Tasks />} />
         <Route path="/projects" element={<Projects />} />
         <Route path="/workspace" element={<Workspace />} />
+        <Route path="/calendar" element={<Calendar />} />
       </Routes>
     </BrowserRouter>
   );
