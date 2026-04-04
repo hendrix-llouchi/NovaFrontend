@@ -31,8 +31,8 @@ const Sidebar = ({ isOpen, toggle }: { isOpen: boolean, toggle: () => void }) =>
       { name: 'Calendar', icon: Calendar, to: '/calendar' },
     ]},
     { section: 'COLLABORATION', items: [
-      { name: 'Conferencing', icon: Video, badge: 'NEW' },
-      { name: 'Teams', icon: Users },
+      { name: 'Conferencing', icon: Video, badge: 'NEW', to: '/meetings' },
+      { name: 'Teams', icon: Users, to: '/teams' },
       { name: 'Messages', icon: MessageSquare, count: 2 },
     ]}
   ];

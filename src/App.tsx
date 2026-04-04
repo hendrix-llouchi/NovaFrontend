@@ -10,6 +10,9 @@ import Tasks from './pages/Tasks';
 import Projects from './pages/Projects';
 import Workspace from './pages/Workspace';
 import Calendar from './pages/Calendar';
+import Meetings from './pages/Meetings';
+import Teams from './pages/Teams';
+import TeamWorkspace from './pages/TeamWorkspace';
 
 function App() {
   return (
@@ -25,6 +28,9 @@ function App() {
         <Route path="/projects" element={<Projects />} />
         <Route path="/workspace" element={<Workspace />} />
         <Route path="/calendar" element={<Calendar />} />
+        <Route path="/meetings" element={<Meetings />} />
+        <Route path="/teams" element={<Teams />} />
+        <Route path="/team-workspace" element={<TeamWorkspace />} />
       </Routes>
     </BrowserRouter>
   );

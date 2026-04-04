@@ -128,19 +128,21 @@ Every UI implementation **MUST** strictly follow these rules. Deviating from the
 
 ### Glassmorphism Navbar Pattern
 
-The Navbar is a **floating, fixed-position glass capsule**. Always follow this implementation:
+The Navbar is a **floating, fixed-position glass capsule**. Always follow this implementation on EVERY SINGLE PAGE:
+
+**CRITICAL RULE**: EVERY component page in NovaSpace (from Dashboard to Workspaces, Teams, Settings, etc.) MUST implement this dynamically floating glass capsule header instead of a rigid layout top-bar. Even if a user-provided design reference mockup shows a flat or rigid 100vw header locked to the top edge, **OVERRIDE IT** and enforce the floating glass capsule aesthetic shown below.
 
 ```tsx
-<header className="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-[100] w-full max-w-[calc(100%-48px)] md:max-w-6xl pointer-events-none">
+<header className="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-[100] w-full max-w-[calc(100%-48px)] md:max-w-6xl pointer-events-none transition-all duration-500">
   <nav className="backdrop-blur-xl bg-white/70 border border-white/40 rounded-3xl md:rounded-[2rem] px-5 md:px-10 py-2.5 md:py-4 flex items-center justify-between shadow-[0_8px_32px_rgba(0,0,0,0.06)] pointer-events-auto ring-1 ring-slate-900/5">
-    {/* ... */}
+    {/* Action buttons, Breadcrumbs, or the standard links go here */}
   </nav>
 </header>
 ```
 
 - **Active link**: `text-slate-900 border-b-2 border-slate-900`
 - **Inactive links**: `text-slate-500 hover:text-slate-900`
-- **Sign up button**: `bg-slate-900 text-white rounded-2xl` (NOT rounded-full)
+- **Buttons inside Header**: Use `bg-slate-900 text-white rounded-2xl` for primary action or `bg-white/50 border border-slate-200 rounded-xl` for secondary (NOT rounded-full)
 - **Mobile menu**: Glassmorphic `backdrop-blur-3xl bg-white/95` slide-down overlay with `<Menu>` / `<X>` toggle
 
 ### Spacing & Layout Conventions
