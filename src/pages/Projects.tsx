@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
+  FolderKanban,
+  LayoutDashboard,
   CheckSquare,
+  Calendar,
+  Layers,
   Plus,
   Search,
   ChevronDown,
@@ -10,34 +14,27 @@ import {
   Menu,
   X,
   ArrowLeft,
-  Users,
-  Filter,
-  SlidersHorizontal,
-  LayoutDashboard,
-  FolderKanban,
-  Calendar,
-  CheckCircle2,
-  Circle,
-  Clock,
-  AlertCircle,
+  ChevronLeft,
+  Grid,
+  List,
   MoreHorizontal,
-  Trash2,
-  ChevronLeft
+  Clock,
+  CheckCircle2,
+  Trash2
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type Priority = 'High' | 'Medium' | 'Low';
-type Status = 'Todo' | 'In Progress' | 'Done';
+type Status = 'Planning' | 'Active' | 'Completed';
 
-interface Task {
+interface Project {
   id: string;
-  title: string;
+  name: string;
   description: string;
-  priority: Priority;
   status: Status;
   dueDate: string;
+  progress: number;
   createdAt: string;
 }
 
@@ -61,16 +58,12 @@ const NavItem = ({ item }: { item: NavItemProps }) => (
   </Link>
 );
 
-const Sidebar = ({ isOpen, toggle, onAddTask }: { isOpen: boolean; toggle: () => void; onAddTask: () => void }) => {
-  const quickAccess: NavItemProps[] = [
-    { name: 'My Tasks', icon: CheckSquare, active: true, to: '/tasks' },
-    { name: 'Team Tasks', icon: Users, to: '#' },
-    { name: 'Filter Tasks', icon: Filter, to: '#' },
-  ];
+const Sidebar = ({ isOpen, toggle, onAddProject }: { isOpen: boolean; toggle: () => void; onAddProject: () => void }) => {
   const main: NavItemProps[] = [
     { name: 'Dashboard', icon: LayoutDashboard, to: '/dashboard' },
-    { name: 'My Tasks', icon: CheckSquare, active: true, to: '/tasks' },
-    { name: 'Projects', icon: FolderKanban, to: '/projects' },
+    { name: 'My Tasks', icon: CheckSquare, to: '/tasks' },
+    { name: 'Projects', icon: FolderKanban, active: true, to: '/projects' },
+    { name: 'Workspace', icon: Layers, to: '#' },
     { name: 'Calendar', icon: Calendar, to: '#' },
   ];
 
@@ -104,22 +97,14 @@ const Sidebar = ({ isOpen, toggle, onAddTask }: { isOpen: boolean; toggle: () =>
               </button>
             </div>
 
-            {/* Add Task CTA */}
+            {/* Add Project CTA */}
             <button
-              onClick={onAddTask}
+              onClick={onAddProject}
               className="w-full bg-slate-950 text-white flex items-center justify-center gap-2 py-3 rounded-2xl font-bold text-sm shadow-xl shadow-slate-200 hover:bg-black transition-all mb-8 group"
             >
               <Plus className="w-4 h-4" />
-              Add New Task
+              New Project
             </button>
-
-            {/* Quick Access */}
-            <div className="mb-6">
-              <p className="text-[9px] font-bold text-slate-400 tracking-widest uppercase px-3 mb-3">Quick Access</p>
-              <nav className="space-y-1">
-                {quickAccess.map((item, i) => <React.Fragment key={i}><NavItem item={item} /></React.Fragment>)}
-              </nav>
-            </div>
 
             {/* Main */}
             <div className="mb-6">
@@ -127,11 +112,6 @@ const Sidebar = ({ isOpen, toggle, onAddTask }: { isOpen: boolean; toggle: () =>
               <nav className="space-y-1">
                 {main.map((item, i) => <React.Fragment key={i}><NavItem item={item} /></React.Fragment>)}
               </nav>
-            </div>
-
-            {/* Task Overview */}
-            <div className="mt-auto pt-5 border-t border-slate-100">
-              <p className="text-sm font-bold text-slate-900 px-3 py-2">Task Overview</p>
             </div>
           </motion.aside>
         )}
@@ -175,7 +155,7 @@ const AppHeader = ({
         <div className="hidden md:flex items-center gap-2 text-sm font-bold text-slate-500">
           <Link to="/dashboard" className="hover:text-slate-900 transition-colors">Dashboard</Link>
           <span className="text-slate-200">/</span>
-          <span className="text-slate-900">My Tasks</span>
+          <span className="text-slate-900">Projects</span>
         </div>
       </div>
 
@@ -185,7 +165,7 @@ const AppHeader = ({
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400" strokeWidth={2} />
           <input
             type="text"
-            placeholder="Search all tasks..."
+            placeholder="Search projects..."
             className="w-full pl-9 pr-4 py-2 rounded-xl bg-slate-50 border border-transparent focus:bg-white focus:border-slate-200 focus:outline-none text-xs font-bold text-slate-900 placeholder:text-slate-400 transition-all"
           />
         </div>
@@ -200,140 +180,128 @@ const AppHeader = ({
   </header>
 );
 
-// ─── Priority Badge ────────────────────────────────────────────────────────────
-
-const PriorityBadge = ({ priority }: { priority: Priority }) => {
-  const styles: Record<Priority, string> = {
-    High: 'bg-slate-900 text-white',
-    Medium: 'bg-slate-100 text-slate-700',
-    Low: 'bg-slate-50 text-slate-400',
-  };
-  return (
-    <span className={`text-[9px] font-bold tracking-widest uppercase px-2.5 py-1 rounded-full ${styles[priority]}`}>
-      {priority}
-    </span>
-  );
-};
-
 // ─── Status Icon ──────────────────────────────────────────────────────────────
 
 const StatusIcon = ({ status }: { status: Status }) => {
-  if (status === 'Done') return <CheckCircle2 className="w-5 h-5 text-slate-900" strokeWidth={1.5} />;
-  if (status === 'In Progress') return <Clock className="w-5 h-5 text-slate-500" strokeWidth={1.5} />;
-  return <Circle className="w-5 h-5 text-slate-300" strokeWidth={1.5} />;
+  if (status === 'Completed') return <CheckCircle2 className="w-4 h-4 text-slate-900" strokeWidth={1.5} />;
+  if (status === 'Active') return <Clock className="w-4 h-4 text-slate-500" strokeWidth={1.5} />;
+  return <FolderKanban className="w-4 h-4 text-slate-300" strokeWidth={1.5} />;
 };
 
-// ─── Task Card ────────────────────────────────────────────────────────────────
+// ─── Project Card ─────────────────────────────────────────────────────────────
 
-const TaskCard = ({
-  task,
+const ProjectCard = ({
+  project,
   onStatusToggle,
   onDelete,
 }: {
-  task: Task;
+  project: Project;
   onStatusToggle: (id: string) => void;
   onDelete: (id: string) => void;
 }) => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const isDone = task.status === 'Done';
+  const isCompleted = project.status === 'Completed';
 
   return (
     <motion.div
       layout
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, x: -20 }}
-      className={`flex items-center gap-4 p-4 md:p-5 bg-white border rounded-2xl md:rounded-[1.75rem] shadow-sm hover:shadow-md hover:border-slate-200 transition-all group ${
-        isDone ? 'border-slate-100 opacity-60' : 'border-slate-100'
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.95 }}
+      className={`p-5 bg-white border rounded-[1.75rem] shadow-sm hover:shadow-md hover:border-slate-200 transition-all group flex flex-col ${
+        isCompleted ? 'border-slate-100 opacity-60' : 'border-slate-100'
       }`}
     >
-      {/* Status toggle */}
-      <button
-        onClick={() => onStatusToggle(task.id)}
-        className="shrink-0 hover:scale-110 transition-transform"
-      >
-        <StatusIcon status={task.status} />
-      </button>
-
-      {/* Task info */}
-      <div className="flex-1 min-w-0">
-        <p className={`font-bold text-sm text-slate-900 truncate ${isDone ? 'line-through text-slate-400' : ''}`}>
-          {task.title}
-        </p>
-        {task.description && (
-          <p className="text-xs text-slate-500 truncate mt-0.5">{task.description}</p>
-        )}
+      <div className="flex items-start justify-between mb-4">
+        <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0">
+           <StatusIcon status={project.status} />
+        </div>
+        
+        {/* Actions menu */}
+        <div className="relative">
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="w-8 h-8 rounded-xl opacity-0 group-hover:opacity-100 flex items-center justify-center text-slate-400 hover:text-slate-900 hover:bg-slate-50 transition-all"
+          >
+            <MoreHorizontal className="w-4 h-4" />
+          </button>
+          <AnimatePresence>
+            {menuOpen && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95, y: -5 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                className="absolute right-0 top-10 z-50 bg-white rounded-2xl border border-slate-100 shadow-xl p-1.5 min-w-[140px]"
+              >
+                <button
+                  onClick={() => { onStatusToggle(project.id); setMenuOpen(false); }}
+                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors"
+                >
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  {isCompleted ? 'Mark Active' : 'Mark Completed'}
+                </button>
+                <button
+                  onClick={() => { onDelete(project.id); setMenuOpen(false); }}
+                  className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-400 hover:bg-slate-50 hover:text-slate-900 transition-colors"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                  Delete
+                </button>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </div>
+      
+      <h3 className={`font-serif text-lg font-bold text-slate-900 mb-1 truncate ${isCompleted ? 'text-slate-500' : ''}`}>
+        {project.name}
+      </h3>
+      <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed mb-4 flex-1">
+        {project.description || 'No description provided.'}
+      </p>
 
-      {/* Meta */}
-      <div className="hidden sm:flex items-center gap-3 shrink-0">
-        <PriorityBadge priority={task.priority} />
-        {task.dueDate && (
-          <div className="flex items-center gap-1 text-[10px] font-bold text-slate-400">
-            <Calendar className="w-3 h-3" />
-            {task.dueDate}
+      <div className="mt-auto pt-4 border-t border-slate-50 gap-4 flex flex-col">
+          <div className="flex items-center justify-between">
+              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">{project.status}</span>
+              {project.dueDate && (
+                  <div className="flex items-center gap-1 text-[10px] font-bold text-slate-400">
+                    <Calendar className="w-3 h-3" />
+                    {project.dueDate}
+                  </div>
+              )}
           </div>
-        )}
-      </div>
-
-      {/* Actions menu */}
-      <div className="relative shrink-0">
-        <button
-          onClick={() => setMenuOpen(!menuOpen)}
-          className="w-8 h-8 rounded-xl opacity-0 group-hover:opacity-100 flex items-center justify-center text-slate-400 hover:text-slate-900 hover:bg-slate-50 transition-all"
-        >
-          <MoreHorizontal className="w-4 h-4" />
-        </button>
-        <AnimatePresence>
-          {menuOpen && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: -5 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="absolute right-0 top-10 z-50 bg-white rounded-2xl border border-slate-100 shadow-xl p-1.5 min-w-[140px]"
-            >
-              <button
-                onClick={() => { onStatusToggle(task.id); setMenuOpen(false); }}
-                className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors"
-              >
-                <CheckCircle2 className="w-3.5 h-3.5" />
-                {isDone ? 'Mark Undone' : 'Mark Done'}
-              </button>
-              <button
-                onClick={() => { onDelete(task.id); setMenuOpen(false); }}
-                className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-400 hover:bg-slate-50 hover:text-slate-900 transition-colors"
-              >
-                <Trash2 className="w-3.5 h-3.5" />
-                Delete
-              </button>
-            </motion.div>
-          )}
-        </AnimatePresence>
+          {/* Progress bar */}
+          <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+              <div 
+                  className={`h-full rounded-full transition-all duration-500 ${isCompleted ? 'bg-slate-300' : 'bg-slate-900'}`}
+                  style={{ width: `${project.progress}%` }}
+              />
+          </div>
       </div>
     </motion.div>
   );
 };
 
-// ─── Create Task Modal ─────────────────────────────────────────────────────────
+// ─── Create Project Modal ─────────────────────────────────────────────────────
 
-const CreateTaskModal = ({
+const CreateProjectModal = ({
   onClose,
   onCreate,
 }: {
   onClose: () => void;
-  onCreate: (task: Omit<Task, 'id' | 'createdAt'>) => void;
+  onCreate: (project: Omit<Project, 'id' | 'createdAt'>) => void;
 }) => {
   const [form, setForm] = useState({
-    title: '',
+    name: '',
     description: '',
-    priority: 'Medium' as Priority,
-    status: 'Todo' as Status,
+    status: 'Planning' as Status,
     dueDate: '',
+    progress: 0
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!form.title.trim()) return;
+    if (!form.name.trim()) return;
     onCreate(form);
     onClose();
   };
@@ -354,7 +322,7 @@ const CreateTaskModal = ({
         className="bg-white rounded-[2.5rem] shadow-2xl shadow-slate-200 border border-slate-100 p-8 w-full max-w-md"
       >
         <div className="flex items-center justify-between mb-8">
-          <h2 className="font-serif text-2xl font-bold text-slate-900">New Task</h2>
+          <h2 className="font-serif text-2xl font-bold text-slate-900">New Project</h2>
           <button
             onClick={onClose}
             className="w-9 h-9 rounded-xl bg-slate-50 flex items-center justify-center text-slate-400 hover:text-slate-900 hover:bg-slate-100 transition-all"
@@ -365,13 +333,13 @@ const CreateTaskModal = ({
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="font-bold text-[10px] tracking-widest uppercase text-slate-400 block mb-2">Task Title *</label>
+            <label className="font-bold text-[10px] tracking-widest uppercase text-slate-400 block mb-2">Project Name *</label>
             <input
               autoFocus
               type="text"
-              value={form.title}
-              onChange={e => setForm({ ...form, title: e.target.value })}
-              placeholder="e.g. Design the landing page"
+              value={form.name}
+              onChange={e => setForm({ ...form, name: e.target.value })}
+              placeholder="e.g. Website Redesign"
               className="w-full px-4 py-3 border border-slate-200 rounded-2xl text-sm font-medium text-slate-900 placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all"
             />
           </div>
@@ -381,7 +349,7 @@ const CreateTaskModal = ({
             <textarea
               value={form.description}
               onChange={e => setForm({ ...form, description: e.target.value })}
-              placeholder="Optional details..."
+              placeholder="Project details..."
               rows={3}
               className="w-full px-4 py-3 border border-slate-200 rounded-2xl text-sm font-medium text-slate-900 placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all resize-none"
             />
@@ -389,15 +357,15 @@ const CreateTaskModal = ({
 
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="font-bold text-[10px] tracking-widest uppercase text-slate-400 block mb-2">Priority</label>
+              <label className="font-bold text-[10px] tracking-widest uppercase text-slate-400 block mb-2">Status</label>
               <select
-                value={form.priority}
-                onChange={e => setForm({ ...form, priority: e.target.value as Priority })}
+                value={form.status}
+                onChange={e => setForm({ ...form, status: e.target.value as Status })}
                 className="w-full px-4 py-3 border border-slate-200 rounded-2xl text-sm font-bold text-slate-900 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent bg-white transition-all"
               >
-                <option>High</option>
-                <option>Medium</option>
-                <option>Low</option>
+                <option>Planning</option>
+                <option>Active</option>
+                <option>Completed</option>
               </select>
             </div>
             <div>
@@ -423,7 +391,7 @@ const CreateTaskModal = ({
               type="submit"
               className="flex-1 py-3 rounded-2xl bg-slate-900 text-white font-bold text-sm hover:bg-black transition-all flex items-center justify-center gap-2"
             >
-              <Plus className="w-4 h-4" /> Create Task
+              <Plus className="w-4 h-4" /> Create Project
             </button>
           </div>
         </form>
@@ -483,60 +451,48 @@ const Dropdown = ({
 
 // ─── Main Page ────────────────────────────────────────────────────────────────
 
-const Tasks = () => {
+const Projects = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [projects, setProjects] = useState<Project[]>([]);
   const [showModal, setShowModal] = useState(false);
-  const [priorityFilter, setPriorityFilter] = useState('All Priorities');
   const [statusFilter, setStatusFilter] = useState('All Status');
   const [search, setSearch] = useState('');
-  const [sortBy, setSortBy] = useState<'date' | 'priority'>('date');
 
-  const createTask = (data: Omit<Task, 'id' | 'createdAt'>) => {
-    const task: Task = {
+  const createProject = (data: Omit<Project, 'id' | 'createdAt'>) => {
+    const project: Project = {
       ...data,
       id: Date.now().toString(),
       createdAt: new Date().toISOString(),
     };
-    setTasks(prev => [task, ...prev]);
+    setProjects(prev => [project, ...prev]);
   };
 
-  const toggleTaskStatus = (id: string) => {
-    setTasks(prev =>
-      prev.map(t =>
-        t.id === id
-          ? { ...t, status: t.status === 'Done' ? 'Todo' : 'Done' }
-          : t
+  const toggleProjectStatus = (id: string) => {
+    setProjects(prev =>
+      prev.map(p =>
+        p.id === id
+          ? { 
+              ...p, 
+              status: p.status === 'Completed' ? 'Active' : 'Completed',
+              progress: p.status !== 'Completed' ? 100 : p.progress // Set to 100 if completing
+            }
+          : p
       )
     );
   };
 
-  const deleteTask = (id: string) => {
-    setTasks(prev => prev.filter(t => t.id !== id));
+  const deleteProject = (id: string) => {
+    setProjects(prev => prev.filter(p => p.id !== id));
   };
 
-  const priorityOrder: Record<Priority, number> = { High: 0, Medium: 1, Low: 2 };
-
-  const filtered = tasks
-    .filter(t => priorityFilter === 'All Priorities' || t.priority === priorityFilter)
-    .filter(t => statusFilter === 'All Status' || t.status === statusFilter)
-    .filter(t => t.title.toLowerCase().includes(search.toLowerCase()))
-    .sort((a, b) =>
-      sortBy === 'priority'
-        ? priorityOrder[a.priority] - priorityOrder[b.priority]
-        : new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-    );
-
-  const stats = {
-    total: tasks.length,
-    done: tasks.filter(t => t.status === 'Done').length,
-    inProgress: tasks.filter(t => t.status === 'In Progress').length,
-    high: tasks.filter(t => t.priority === 'High' && t.status !== 'Done').length,
-  };
+  const filtered = projects
+    .filter(p => statusFilter === 'All Status' || p.status === statusFilter)
+    .filter(p => p.name.toLowerCase().includes(search.toLowerCase()))
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
   return (
     <div className="min-h-screen bg-[#FDFDFD] font-sans">
-      <Sidebar isOpen={isSidebarOpen} toggle={() => setIsSidebarOpen(!isSidebarOpen)} onAddTask={() => setShowModal(true)} />
+      <Sidebar isOpen={isSidebarOpen} toggle={() => setIsSidebarOpen(!isSidebarOpen)} onAddProject={() => setShowModal(true)} />
       <AppHeader isSidebarOpen={isSidebarOpen} toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
 
       <main className={`transition-all duration-500 pt-24 md:pt-32 pb-12 ${isSidebarOpen ? 'lg:pl-64' : 'pl-0'}`}>
@@ -548,45 +504,17 @@ const Tasks = () => {
               <Link to="/dashboard" className="text-slate-400 hover:text-slate-900 transition-colors">
                 <ArrowLeft className="w-5 h-5" />
               </Link>
-              <h1 className="font-serif text-3xl md:text-4xl font-bold text-slate-900">My Tasks</h1>
+              <h1 className="font-serif text-3xl md:text-4xl font-bold text-slate-900">Projects</h1>
             </div>
-            <p className="font-sans text-sm text-slate-500 ml-8">Manage and track your tasks efficiently</p>
+            <p className="font-sans text-sm text-slate-500 ml-8">Manage and track your project progress</p>
           </div>
-
-          {/* Stats strip */}
-          {tasks.length > 0 && (
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4">
-              {[
-                { label: 'Total', value: stats.total, icon: CheckSquare },
-                { label: 'Completed', value: stats.done, icon: CheckCircle2 },
-                { label: 'In Progress', value: stats.inProgress, icon: Clock },
-                { label: 'High Priority', value: stats.high, icon: AlertCircle },
-              ].map((s, i) => (
-                <div key={i} className="bg-white border border-slate-100 rounded-2xl p-4 flex items-center gap-3 shadow-sm">
-                  <div className="w-9 h-9 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center shrink-0">
-                    <s.icon className="w-4 h-4 text-slate-900" strokeWidth={1.5} />
-                  </div>
-                  <div>
-                    <p className="font-serif text-xl font-bold text-slate-900">{s.value}</p>
-                    <p className="text-[9px] font-bold text-slate-400 uppercase tracking-widest">{s.label}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
 
           {/* Filter toolbar */}
           <div className="flex flex-wrap items-center gap-3">
             <Dropdown
-              label="All Priorities"
-              value={priorityFilter}
-              options={['All Priorities', 'High', 'Medium', 'Low']}
-              onChange={setPriorityFilter}
-            />
-            <Dropdown
               label="All Status"
               value={statusFilter}
-              options={['All Status', 'Todo', 'In Progress', 'Done']}
+              options={['All Status', 'Planning', 'Active', 'Completed']}
               onChange={setStatusFilter}
             />
 
@@ -596,54 +524,57 @@ const Tasks = () => {
                 type="text"
                 value={search}
                 onChange={e => setSearch(e.target.value)}
-                placeholder="Search tasks..."
+                placeholder="Search projects..."
                 className="w-full pl-9 pr-4 py-2.5 border border-slate-200 rounded-2xl text-xs font-bold text-slate-900 placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent bg-white transition-all"
               />
             </div>
 
-            <button
-              onClick={() => setSortBy(s => s === 'date' ? 'priority' : 'date')}
-              className="flex items-center gap-2 px-4 py-2.5 border border-slate-200 rounded-2xl text-xs font-bold text-slate-700 bg-white hover:border-slate-300 transition-all whitespace-nowrap ml-auto"
-            >
-              <SlidersHorizontal className="w-3.5 h-3.5 text-slate-400" />
-              Sort: {sortBy === 'date' ? 'Date' : 'Priority'}
-            </button>
+            <div className="flex bg-slate-50 rounded-2xl p-1 border border-slate-200 ml-auto items-center">
+                <button className="w-8 h-8 rounded-xl bg-white shadow-sm flex items-center justify-center text-slate-900 transition-all">
+                    <Grid className="w-4 h-4" />
+                </button>
+                <button className="w-8 h-8 rounded-xl flex items-center justify-center text-slate-400 hover:text-slate-900 transition-all">
+                    <List className="w-4 h-4" />
+                </button>
+            </div>
           </div>
 
-          {/* Task list */}
-          <div className="space-y-3">
+          {/* Projects list */}
+          <div>
             <AnimatePresence mode="popLayout">
               {filtered.length > 0 ? (
-                filtered.map(task => (
-                  <React.Fragment key={task.id}>
-                    <TaskCard
-                      task={task}
-                      onStatusToggle={toggleTaskStatus}
-                      onDelete={deleteTask}
-                    />
-                  </React.Fragment>
-                ))
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {filtered.map(project => (
+                    <React.Fragment key={project.id}>
+                      <ProjectCard
+                        project={project}
+                        onStatusToggle={toggleProjectStatus}
+                        onDelete={deleteProject}
+                      />
+                    </React.Fragment>
+                  ))}
+                </div>
               ) : (
                 <motion.div
                   key="empty"
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0 }}
-                  className="flex flex-col items-center justify-center py-24 text-center"
+                  className="flex flex-col items-center justify-center py-24 text-center mt-6 border rounded-[2rem] border-slate-100 bg-white"
                 >
                   <div className="w-16 h-16 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-center mb-6 shadow-sm">
-                    <CheckSquare className="w-8 h-8 text-slate-200" strokeWidth={1.5} />
+                    <FolderKanban className="w-8 h-8 text-slate-200" strokeWidth={1.5} />
                   </div>
-                  <h3 className="font-serif text-xl font-bold text-slate-900 mb-2">No tasks found</h3>
+                  <h3 className="font-serif text-xl font-bold text-slate-900 mb-2">No projects found</h3>
                   <p className="text-sm text-slate-400 font-medium mb-8">
-                    {tasks.length > 0 ? 'Try adjusting your filters' : 'Create your first task to get started'}
+                    {projects.length > 0 ? 'Try adjusting your filters' : 'Create your first project to get started'}
                   </p>
-                  {tasks.length === 0 && (
+                  {projects.length === 0 && (
                     <button
                       onClick={() => setShowModal(true)}
                       className="flex items-center gap-2 bg-slate-900 text-white px-8 py-3.5 rounded-2xl font-bold text-sm hover:bg-black transition-all shadow-xl shadow-slate-200"
                     >
-                      <Plus className="w-4 h-4" /> Create Task
+                      New Project
                     </button>
                   )}
                 </motion.div>
@@ -653,14 +584,14 @@ const Tasks = () => {
         </div>
       </main>
 
-      {/* Create Task Modal */}
+      {/* Create Project Modal */}
       <AnimatePresence>
         {showModal && (
-          <CreateTaskModal onClose={() => setShowModal(false)} onCreate={createTask} />
+          <CreateProjectModal onClose={() => setShowModal(false)} onCreate={createProject} />
         )}
       </AnimatePresence>
     </div>
   );
 };
 
-export default Tasks;
+export default Projects;

@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard';
 import About from './pages/About';
 import WebSearch from './pages/WebSearch';
 import Tasks from './pages/Tasks';
+import Projects from './pages/Projects';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/web-search" element={<WebSearch />} />
         <Route path="/tasks" element={<Tasks />} />
+        <Route path="/projects" element={<Projects />} />
       </Routes>
     </BrowserRouter>
   );
