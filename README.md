@@ -4,20 +4,27 @@
 
 # NovaSpace — AI-Powered Collaboration Workspace
 
-**NovaSpace** is a premium, AI-driven collaboration workspace landing page. It features a clean **Black & White** editorial aesthetic with glassmorphism UI components, fluid animations, and a multi-section marketing layout built with React 19 and Tailwind CSS v4.
+**NovaSpace** is a premium, AI-driven collaboration workspace. Originally designed as a landing page, it has evolved into a full-scale multi-page React Application complete with user authentication flows, dynamic dashboard modules, team management hubs, and integrated conferencing pages.
 
-## ✨ Features
+The application rigidly strictly adheres to a **Monochromatic Black & White** editorial aesthetic using custom glassmorphism components and fluid framer-motion animations, built with React 19 and Tailwind CSS v4.
 
-- **Glassmorphism Navbar** — Floating, frosted-glass navigation capsule with interactive Features dropdown and mobile menu
-- **Hero Section** — Bold serif headline, subtext, and dual CTAs
-- **Logo Ticker** — Infinite-scroll marquee of partner brands
-- **Features / Workspace / AI-Powered Sections** — Rich feature cards with Lucide icons
-- **Machine Learning Stats** — Animated key performance metrics
-- **For Everyone Section** — 4-column audience targeting (Students, Developers, Enterprises, Startups)
-- **Why Choose Us** — Efficiency-focused 6-card grid
-- **CTA Section** — Video-background call-to-action with HLS streaming + MP4 fallback
-- **Security & Compliance** — SOC 2, ISO 27001, GDPR, HIPAA badges
-- **Multi-column Footer** — Social links (LinkedIn, Twitter, GitHub, YouTube) and site navigation
+## ✨ Implemented Modules
+
+NovaSpace utilizes **React Router** to manage fully-responsive modular sections:
+
+- **Public Views**
+  - **Landing Page (`/`)** — Marketing funnel with infinite scrolling tickers, pricing logic, video streaming, and feature overviews.
+- **Authentication Flow**
+  - **Login / Signup (`/login`, `/signup`)** — Split-screen editorial authentication with social provider integrations and 2FA features.
+- **Dashboard Ecosystem**
+  - **Overview (`/dashboard`)** — Aggregated statistics, quick-access apps, recent team activities, and global search.
+  - **Tasks (`/tasks`)** — Kanban-ready task management interfaces.
+  - **Projects (`/projects`)** — Comprehensive project tracking and file sorting.
+  - **Workspaces (`/workspace`)** — Personal and shared isolated environments.
+  - **Calendar (`/calendar`)** — Advanced scheduling grid with day/week/month navigation and embedded clock functionality.
+  - **Conferencing / Meetings (`/meetings`)** — Video hub structure detailing public, live, and private meeting rooms.
+  - **Teams (`/teams`)** — Searchable member directory and filtered role mapping.
+  - **Team WorkSpace Hub (`/team-workspace`)** — Central isolated hub displaying distinct capabilities for Admins and standard user privileges.
 
 ## 🛠️ Tech Stack
 
@@ -25,18 +32,18 @@
 |------------|-----------------------------|
 | Framework  | React 19 + Vite 6           |
 | Language   | TypeScript ~5.8             |
+| Routing    | React Router DOM            |
 | Styling    | Tailwind CSS v4 (CSS-first) |
-| Animations | Motion (Framer Motion v12)  |
+| Animations | Motion (Framer Motion)      |
 | Icons      | Lucide React                |
 | Video      | hls.js (native `<video>`)   |
-| AI         | @google/genai               |
 
-## 🎨 Design System
+## 🎨 Design System & Rules
 
-- **Palette**: Strictly **Black & White / Monochromatic** — `slate-900`, `slate-600`, `white`, `slate-50`
-- **Typography**: `Playfair Display` (serif) for all headlines · `Inter` (sans) for UI/body text
-- **Glassmorphism**: `backdrop-blur-xl`, `bg-white/70`, `border border-white/40`, `ring-1 ring-slate-900/5`
-- **No blue, purple, or vibrant colors** — the design system is strictly monochromatic
+- **Palette**: Strictly **Black & White / Monochromatic** (`slate-900`, `slate-600`, `white`, `slate-50`). No vibrant colors are permitted.
+- **Floating Glassmorphism Header**: *Every single dashboard view* universally utilizes a dynamic floating `backdrop-blur-xl` capsule nav bounded by `bg-white/70` and `ring-1 ring-slate-900/5` rules. Rigid headers do not exist here.
+- **Typography**: `Playfair Display` (serif) orchestrates major headlines, accompanied by `Inter` (sans) for crisp UI precision.
+- **Sidebars**: Spring-animated glass slide-over menus (mobile) and structural anchor elements (desktop).
 
 ## 🚀 Run Locally
 
@@ -46,39 +53,26 @@
    ```bash
    npm install
    ```
-2. Set your Gemini API key (optional — only needed for AI features):
-   ```bash
-   cp .env.example .env.local
-   # Edit .env.local and add: GEMINI_API_KEY=your_key_here
-   ```
-3. Start the dev server:
+2. Start the dev server:
    ```bash
    npm run dev
    ```
-4. Open [http://localhost:3000](http://localhost:3000)
+3. Open [http://localhost:3000](http://localhost:3000)
 
 ## 📁 Project Structure
 
 ```
 NovaFrontend/
 ├── src/
-│   ├── App.tsx          # All UI components and page assembly
-│   ├── index.css        # Global styles, Tailwind @theme tokens
-│   └── main.tsx         # React root mount
-├── .agents/
-│   └── skills/
-│       └── novaspace_frontend/
-│           └── SKILL.md # Design system, component patterns, B&W rules
-├── index.html
-├── vite.config.ts
+│   ├── components/      # Shared components (Navbars, Footers, Modals)
+│   ├── pages/           # Dedicated route views (Calendar, Teams, Dashboard)
+│   ├── App.tsx          # Application router configuration
+│   └── index.css        # Core Tailwind @theme injections
+├── .agents/skills/      # AI Contextual Development Directives
+├── vite.config.ts       # Build configuration
 └── package.json
 ```
 
-## 🔐 Security
-
-- `GEMINI_API_KEY` is loaded from `.env.local` — **never committed to git**
-- `.env.local` is included in `.gitignore`
-
 ---
 
-*Made with ❤️ in Ghana*
+*Built with ❤️ in Ghana*
