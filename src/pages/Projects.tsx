@@ -63,7 +63,7 @@ const Sidebar = ({ isOpen, toggle, onAddProject }: { isOpen: boolean; toggle: ()
     { name: 'Dashboard', icon: LayoutDashboard, to: '/dashboard' },
     { name: 'My Tasks', icon: CheckSquare, to: '/tasks' },
     { name: 'Projects', icon: FolderKanban, active: true, to: '/projects' },
-    { name: 'Workspace', icon: Layers, to: '#' },
+    { name: 'Workspace', icon: Layers, to: '/workspace' },
     { name: 'Calendar', icon: Calendar, to: '#' },
   ];
 
