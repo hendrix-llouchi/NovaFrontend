@@ -252,13 +252,16 @@ const Sidebar = ({
                   </div>
                   <ChevronRight className="w-3.5 h-3.5 text-slate-300" />
                 </button>
-                <button className="w-full flex items-center justify-between px-3 py-2.5 rounded-2xl text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-slate-900 transition-all">
+                <Link
+                  to="/notebooks"
+                  className="w-full flex items-center justify-between px-3 py-2.5 rounded-2xl text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-slate-900 transition-all"
+                >
                   <div className="flex items-center gap-3">
                     <BookOpen className="w-4 h-4 text-slate-400" strokeWidth={1.5} />
                     Notebooks
                   </div>
                   <ChevronRight className="w-3.5 h-3.5 text-slate-300" />
-                </button>
+                </Link>
                 <Link
                   to="/dashboard"
                   className="w-full flex items-center justify-between px-3 py-2.5 rounded-2xl text-sm font-bold text-slate-500 hover:bg-slate-50 hover:text-slate-900 transition-all"

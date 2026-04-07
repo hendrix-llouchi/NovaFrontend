@@ -571,7 +571,7 @@ const Footer = () => (
             <li><Link to="/dashboard" className="hover:text-slate-900 transition-colors">Dashboard</Link></li>
             <li><a href="#" className="hover:text-slate-900 transition-colors">Projects</a></li>
             <li><a href="#" className="hover:text-slate-900 transition-colors">Tasks</a></li>
-            <li><a href="#" className="hover:text-slate-900 transition-colors">Notebooks</a></li>
+            <li><Link to="/notebooks" className="hover:text-slate-900 transition-colors">Notebooks</Link></li>
             <li><a href="#" className="hover:text-slate-900 transition-colors">Calendar</a></li>
           </ul>
         </div>

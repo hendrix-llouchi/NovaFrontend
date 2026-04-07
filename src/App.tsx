@@ -14,6 +14,7 @@ import Meetings from './pages/Meetings';
 import Teams from './pages/Teams';
 import TeamWorkspace from './pages/TeamWorkspace';
 import AIAssistant from './pages/AIAssistant';
+import Notebooks from './pages/Notebooks';
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
         <Route path="/teams" element={<Teams />} />
         <Route path="/team-workspace" element={<TeamWorkspace />} />
         <Route path="/ai-assistant" element={<AIAssistant />} />
+        <Route path="/notebooks" element={<Notebooks />} />
       </Routes>
     </BrowserRouter>
   );
