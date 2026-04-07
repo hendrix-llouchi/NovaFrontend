@@ -39,7 +39,7 @@ const LeftSidebar = ({ isOpen, toggle }: { isOpen: boolean; toggle: () => void }
   const nav: NavItemProps[] = [
     { name: 'Dashboard', icon: LayoutDashboard, to: '/dashboard' },
     { name: 'Tasks', icon: CheckSquare, to: '/tasks' },
-    { name: 'Team Projects', icon: FolderKanban, to: '#' },
+    { name: 'Team Projects', icon: FolderKanban, to: '/projects' },
     { name: 'Teams', icon: Users, to: '/teams' },
     { name: 'Team WorkSpace', icon: Layers, active: true, to: '/team-workspace' },
     { name: 'Calendar', icon: Calendar, to: '/calendar' },

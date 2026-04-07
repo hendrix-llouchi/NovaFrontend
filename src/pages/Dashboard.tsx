@@ -72,10 +72,10 @@ const Sidebar = ({ isOpen, toggle }: { isOpen: boolean, toggle: () => void }) =>
               </button>
             </div>
 
-            <button className="w-full bg-slate-950 text-white flex items-center justify-center gap-2 py-3.5 rounded-2xl font-bold text-sm shadow-xl shadow-slate-200 hover:bg-black transition-all mb-10 group">
+            <Link to="/projects" className="w-full bg-slate-950 text-white flex items-center justify-center gap-2 py-3.5 rounded-2xl font-bold text-sm shadow-xl shadow-slate-200 hover:bg-black transition-all mb-10 group">
               <Plus className="w-4 h-4 text-white" />
               New Project
-            </button>
+            </Link>
 
             <nav className="flex-1 space-y-8 overflow-y-auto custom-scrollbar">
               {menuItems.map((sec, i) => (
