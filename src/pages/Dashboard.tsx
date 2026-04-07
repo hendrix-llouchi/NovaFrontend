@@ -141,10 +141,10 @@ const Header = ({ isSidebarOpen, toggleSidebar }: { isSidebarOpen: boolean, togg
                 </div>
                 <Link to="/dashboard" className="text-[13px] font-bold text-slate-950 border-b-2 border-slate-950 pb-0.5">Dashboard</Link>
                 <a href="#" className="text-[13px] font-bold text-slate-500 hover:text-slate-950 transition-colors">Projects</a>
-                <div className="flex items-center gap-2 px-3 py-1 bg-slate-100 rounded-lg border border-white/50">
+                <Link to="/ai-assistant" className="flex items-center gap-2 px-3 py-1 bg-slate-100 rounded-lg border border-white/50 hover:bg-slate-200 transition-colors">
                     <div className="w-1.5 h-1.5 rounded-full bg-slate-900 animate-pulse" />
                     <span className="text-[11px] font-bold text-slate-900">AI Assistant</span>
-                </div>
+                </Link>
             </div>
         </div>
 

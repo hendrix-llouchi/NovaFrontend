@@ -17,11 +17,11 @@ const Navbar = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
 
   const featureLinks = [
-    { title: "AI Assistant", desc: "Smart tutoring, chat & adaptive learning", icon: Brain, isNew: true },
-    { title: "WorkSpace", desc: "Code & document workspace manager", icon: Folder, isNew: true },
-    { title: "Teams", desc: "Collaborate with team members", icon: Users, isNew: true },
-    { title: "Conferencing", desc: "HD virtual classrooms & meetings", icon: Video },
-    { title: "Live Chat", desc: "Real-time messaging & Q&A sessions", icon: MessageCircle }
+    { title: "AI Assistant", desc: "Smart tutoring, chat & adaptive learning", icon: Brain, isNew: true, to: '/ai-assistant' },
+    { title: "WorkSpace", desc: "Code & document workspace manager", icon: Folder, isNew: true, to: '/workspace' },
+    { title: "Teams", desc: "Collaborate with team members", icon: Users, isNew: true, to: '/teams' },
+    { title: "Conferencing", desc: "HD virtual classrooms & meetings", icon: Video, to: '/meetings' },
+    { title: "Live Chat", desc: "Real-time messaging & Q&A sessions", icon: MessageCircle, to: '#' }
   ];
 
   return (
@@ -56,7 +56,7 @@ const Navbar = () => {
               <div className="backdrop-blur-2xl bg-white/95 border border-white/50 rounded-[2.5rem] shadow-2xl p-6 relative ring-1 ring-slate-900/5">
                 <div className="space-y-1 relative">
                   {featureLinks.map((link, i) => (
-                    <a key={i} href="#" className="flex items-start gap-4 p-4 rounded-3xl hover:bg-slate-50 transition-all group/item">
+                    <Link key={i} to={link.to} className="flex items-start gap-4 p-4 rounded-3xl hover:bg-slate-50 transition-all group/item">
                       <div className="w-11 h-11 rounded-2xl bg-white border border-slate-100 shadow-sm flex items-center justify-center group-hover/item:border-slate-900 group-hover/item:shadow-slate-50 transition-all shrink-0">
                         <link.icon className="w-5 h-5 text-slate-900" strokeWidth={1.5} />
                       </div>
@@ -67,7 +67,7 @@ const Navbar = () => {
                         </div>
                         <p className="text-[11px] text-slate-500 leading-snug truncate group-hover/item:text-slate-900 transition-colors">{link.desc}</p>
                       </div>
-                    </a>
+                    </Link>
                   ))}
                 </div>
               </div>
@@ -110,7 +110,7 @@ const Navbar = () => {
               <p className="text-[10px] font-bold text-slate-400 tracking-widest uppercase mb-4">Features</p>
               <div className="grid grid-cols-1 gap-2">
                 {featureLinks.map((link, i) => (
-                  <a key={i} href="#" className="flex items-center gap-4 p-4 rounded-2xl border border-slate-50 hover:bg-slate-50 transition-all">
+                  <Link key={i} to={link.to} onClick={() => setIsMobileMenuOpen(false)} className="flex items-center gap-4 p-4 rounded-2xl border border-slate-50 hover:bg-slate-50 transition-all">
                     <div className="w-10 h-10 rounded-xl bg-white border border-slate-100 flex items-center justify-center shrink-0">
                       <link.icon className="w-5 h-5 text-slate-900" strokeWidth={1.5} />
                     </div>
@@ -121,7 +121,7 @@ const Navbar = () => {
                       </div>
                       <p className="text-[11px] text-slate-500">{link.desc}</p>
                     </div>
-                  </a>
+                   </Link>
                 ))}
               </div>
             </div>

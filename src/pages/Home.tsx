@@ -590,7 +590,7 @@ const Footer = () => (
         <div>
           <h4 className="font-bold text-xs tracking-widest uppercase text-slate-900 mb-8">AI & Tools</h4>
           <ul className="space-y-4 text-sm text-slate-500 font-medium">
-            <li><a href="#" className="hover:text-slate-900 transition-colors">AI Assistant</a></li>
+            <li><Link to="/ai-assistant" className="hover:text-slate-900 transition-colors">AI Assistant</Link></li>
             <li><a href="#" className="hover:text-slate-900 transition-colors">Apps</a></li>
             <li><Link to="/web-search" className="hover:text-slate-900 transition-colors">Web Search</Link></li>
             <li><a href="#" className="hover:text-slate-900 transition-colors">Meeting</a></li>
