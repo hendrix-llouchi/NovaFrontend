@@ -569,21 +569,21 @@ const Footer = () => (
           <h4 className="font-bold text-xs tracking-widest uppercase text-slate-900 mb-8">Platform</h4>
           <ul className="space-y-4 text-sm text-slate-500 font-medium">
             <li><Link to="/dashboard" className="hover:text-slate-900 transition-colors">Dashboard</Link></li>
-            <li><a href="#" className="hover:text-slate-900 transition-colors">Projects</a></li>
-            <li><a href="#" className="hover:text-slate-900 transition-colors">Tasks</a></li>
+            <li><Link to="/projects" className="hover:text-slate-900 transition-colors">Projects</Link></li>
+            <li><Link to="/tasks" className="hover:text-slate-900 transition-colors">Tasks</Link></li>
             <li><Link to="/notebooks" className="hover:text-slate-900 transition-colors">Notebooks</Link></li>
-            <li><a href="#" className="hover:text-slate-900 transition-colors">Calendar</a></li>
+            <li><Link to="/calendar" className="hover:text-slate-900 transition-colors">Calendar</Link></li>
           </ul>
         </div>
         {/* Workspace */}
         <div>
           <h4 className="font-bold text-xs tracking-widest uppercase text-slate-900 mb-8">Workspace</h4>
           <ul className="space-y-4 text-sm text-slate-500 font-medium">
-            <li><a href="#" className="hover:text-slate-900 transition-colors">My Workspace</a></li>
-            <li><a href="#" className="hover:text-slate-900 transition-colors">Teams</a></li>
-            <li><a href="#" className="hover:text-slate-900 transition-colors">Team Workspace</a></li>
-            <li><a href="#" className="hover:text-slate-900 transition-colors">Team Projects</a></li>
-            <li><a href="#" className="hover:text-slate-900 transition-colors">Chat</a></li>
+            <li><Link to="/workspace" className="hover:text-slate-900 transition-colors">My Workspace</Link></li>
+            <li><Link to="/teams" className="hover:text-slate-900 transition-colors">Teams</Link></li>
+            <li><Link to="/team-workspace" className="hover:text-slate-900 transition-colors">Team Workspace</Link></li>
+            <li><Link to="/projects" className="hover:text-slate-900 transition-colors">Team Projects</Link></li>
+            <li><Link to="/ai-assistant" className="hover:text-slate-900 transition-colors">Chat</Link></li>
           </ul>
         </div>
         {/* AI & Tools */}
@@ -591,9 +591,9 @@ const Footer = () => (
           <h4 className="font-bold text-xs tracking-widest uppercase text-slate-900 mb-8">AI & Tools</h4>
           <ul className="space-y-4 text-sm text-slate-500 font-medium">
             <li><Link to="/ai-assistant" className="hover:text-slate-900 transition-colors">AI Assistant</Link></li>
-            <li><a href="#" className="hover:text-slate-900 transition-colors">Apps</a></li>
+            <li><Link to="/apps" className="hover:text-slate-900 transition-colors">Apps</Link></li>
             <li><Link to="/web-search" className="hover:text-slate-900 transition-colors">Web Search</Link></li>
-            <li><a href="#" className="hover:text-slate-900 transition-colors">Meeting</a></li>
+            <li><Link to="/meetings" className="hover:text-slate-900 transition-colors">Meeting</Link></li>
             <li><Link to="/about" className="hover:text-slate-900 transition-colors">About</Link></li>
           </ul>
         </div>
