@@ -583,7 +583,7 @@ const Footer = () => (
             <li><Link to="/teams" className="hover:text-slate-900 transition-colors">Teams</Link></li>
             <li><Link to="/team-workspace" className="hover:text-slate-900 transition-colors">Team Workspace</Link></li>
             <li><Link to="/projects" className="hover:text-slate-900 transition-colors">Team Projects</Link></li>
-            <li><Link to="/ai-assistant" className="hover:text-slate-900 transition-colors">Chat</Link></li>
+            <li><Link to="/chat" className="hover:text-slate-900 transition-colors">Chat</Link></li>
           </ul>
         </div>
         {/* AI & Tools */}

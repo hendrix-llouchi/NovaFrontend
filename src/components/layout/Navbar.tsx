@@ -21,7 +21,7 @@ const Navbar = () => {
     { title: "WorkSpace", desc: "Code & document workspace manager", icon: Folder, isNew: true, to: '/workspace' },
     { title: "Teams", desc: "Collaborate with team members", icon: Users, isNew: true, to: '/teams' },
     { title: "Conferencing", desc: "HD virtual classrooms & meetings", icon: Video, to: '/meetings' },
-    { title: "Live Chat", desc: "Real-time messaging & Q&A sessions", icon: MessageCircle, to: '#' }
+    { title: "Live Chat", desc: "Real-time messaging & Q&A sessions", icon: MessageCircle, to: '/chat' }
   ];
 
   return (

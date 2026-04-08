@@ -127,6 +127,7 @@ const dashboardFeatureLinks = [
   { title: "WorkSpace", desc: "Code & document workspace manager", icon: Folder, to: '/workspace' },
   { title: "Teams", desc: "Collaborate with team members", icon: Users, to: '/teams' },
   { title: "Conferencing", desc: "HD virtual classrooms & meetings", icon: Video, to: '/meetings' },
+  { title: "Live Chat", desc: "Real-time messaging & Q&A", icon: MessageSquare, to: '/chat' },
   { title: "Web Search", desc: "AI-powered web search", icon: Globe, to: '/web-search' },
 ];
 

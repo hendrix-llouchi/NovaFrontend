@@ -16,6 +16,7 @@ import TeamWorkspace from './pages/TeamWorkspace';
 import AIAssistant from './pages/AIAssistant';
 import Notebooks from './pages/Notebooks';
 import NovaApps from './pages/Apps';
+import Chat from './pages/Chat';
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
         <Route path="/ai-assistant" element={<AIAssistant />} />
         <Route path="/notebooks" element={<Notebooks />} />
         <Route path="/apps" element={<NovaApps />} />
+        <Route path="/chat" element={<Chat />} />
       </Routes>
     </BrowserRouter>
   );
