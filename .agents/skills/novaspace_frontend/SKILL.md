@@ -13,7 +13,7 @@ description: Skill for developing and maintaining the NovaSpace AI-powered colla
 
 ## Project Summary
 
-**NovaSpace** is a modern, AI-powered collaboration workspace. It is built with **React 19 + Vite 6**, TypeScript, and **React Router DOM**. The app is a multi-page application with a landing site, authentication pages (Login, Signup), and a workspace Dashboard.
+**NovaSpace** is a modern, AI-powered collaboration workspace. It is built with **React 19 + Vite 6**, TypeScript, and **React Router DOM**. The app is a multi-page application with a landing site, authentication pages, a workspace dashboard, and a full AI ecosystem (Chat, Notebooks, Apps).
 
 - **Repository Root**: `c:\Users\PC\Downloads\Projects\NovaFrontend`
 - **Dev Server**: `http://localhost:3000` (run `npm run dev`)
@@ -26,7 +26,19 @@ description: Skill for developing and maintaining the NovaSpace AI-powered colla
 | `/` | `src/pages/Home.tsx` | Landing page with all marketing sections |
 | `/login` | `src/pages/Login.tsx` | Split-screen login with social auth |
 | `/signup` | `src/pages/Signup.tsx` | Split-screen registration with MFA toggle |
+| `/about` | `src/pages/About.tsx` | About page |
 | `/dashboard` | `src/pages/Dashboard.tsx` | Authenticated workspace dashboard |
+| `/tasks` | `src/pages/Tasks.tsx` | Task management (Kanban) |
+| `/projects` | `src/pages/Projects.tsx` | Project tracking & creation |
+| `/workspace` | `src/pages/Workspace.tsx` | Personal workspace |
+| `/calendar` | `src/pages/Calendar.tsx` | Calendar & scheduling |
+| `/meetings` | `src/pages/Meetings.tsx` | Video conferencing hub |
+| `/teams` | `src/pages/Teams.tsx` | Team member directory |
+| `/team-workspace` | `src/pages/TeamWorkspace.tsx` | Team workspace hub |
+| `/web-search` | `src/pages/WebSearch.tsx` | AI web search |
+| `/ai-assistant` | `src/pages/AIAssistant.tsx` | AI chat assistant |
+| `/notebooks` | `src/pages/Notebooks.tsx` | AI document processing |
+| `/apps` | `src/pages/Apps.tsx` | Nova Apps marketplace |
 
 ---
 
@@ -56,12 +68,24 @@ NovaFrontend/
 │   ├── main.tsx                        # React root mount
 │   ├── pages/
 │   │   ├── Home.tsx                    # Landing page
+│   │   ├── About.tsx                   # About page
 │   │   ├── Login.tsx                   # Login page
 │   │   ├── Signup.tsx                  # Signup page
-│   │   └── Dashboard.tsx               # Workspace dashboard
+│   │   ├── Dashboard.tsx               # Workspace dashboard
+│   │   ├── Tasks.tsx                   # Task management
+│   │   ├── Projects.tsx                # Project tracking
+│   │   ├── Workspace.tsx               # Personal workspace
+│   │   ├── Calendar.tsx                # Calendar & scheduling
+│   │   ├── Meetings.tsx                # Video conferencing
+│   │   ├── Teams.tsx                   # Team directory
+│   │   ├── TeamWorkspace.tsx           # Team workspace hub
+│   │   ├── WebSearch.tsx               # AI web search
+│   │   ├── AIAssistant.tsx             # AI chat assistant
+│   │   ├── Notebooks.tsx               # AI document processing
+│   │   └── Apps.tsx                    # Nova Apps marketplace
 │   └── components/
 │       └── layout/
-│           └── Navbar.tsx              # Shared glassmorphic navbar (used on Home)
+│           └── Navbar.tsx              # Shared glassmorphic navbar (Home + About)
 ├── index.html
 ├── vite.config.ts
 ├── tsconfig.json
@@ -91,8 +115,8 @@ Tailwind v4 uses a **CSS-first** configuration approach. All theme customization
 |----------------|--------------------------------|--------------------------------------|
 | `font-sans`    | Inter                          | Body text, UI labels, nav            |
 | `font-serif`   | Playfair Display               | Headlines, brand name, stat numbers  |
-| **Primary**    | `blue-600` / `blue-700`        | CTAs, icon accents, links            |
-| **Background** | `white` / `slate-50`           | Page & card backgrounds              |
+| **Primary**    | `slate-900` / `slate-950`      | Buttons, headings, active states     |
+| **Background** | `white` / `slate-50` / `#FDFDFD` | Page & card backgrounds            |
 | **Text**       | `slate-900`, `slate-600`, `slate-500` | Heading, body, muted text     |
 | **Border**     | `slate-200`, `slate-100`       | Card and section dividers            |
 
@@ -105,7 +129,7 @@ Every UI implementation **MUST** strictly follow these rules. Deviating from the
 | Role              | Tailwind Class          | Usage                                            |
 |--------------------|-------------------------|--------------------------------------------------|
 | **Primary BG**     | `bg-white`              | Main page background                             |
-| **Alt BG**         | `bg-slate-50`           | Card & section alternating backgrounds           |
+| **Alt BG**         | `bg-slate-50` / `bg-[#FDFDFD]` | Card & section alternating backgrounds    |
 | **Dark Section**   | `bg-slate-900` / `bg-slate-950` | CTA, dark headers, overlays               |
 | **Primary Text**   | `text-slate-900`        | Headings, labels, bold copy                     |
 | **Body Text**      | `text-slate-600`        | Paragraph / subtext                              |
@@ -116,7 +140,9 @@ Every UI implementation **MUST** strictly follow these rules. Deviating from the
 | **Buttons (Secondary)** | `bg-white text-slate-900 border border-slate-200` | Ghost/outlined buttons  |
 | **Badges**         | `bg-slate-900 text-white` or `bg-slate-50 text-slate-600` | Labels & pill badges |
 
-> 🚨 **NEVER use** `blue-600`, `blue-500`, `blue-50`, `blue-100`, `indigo-*`, `violet-*`, or any vibrant color as a primary UI element. **Blue is fully banned from this design system.** The only exception is a micro-accent (e.g., a 5% opacity tint in a very specific dark-on-dark CTA context).
+> 🚨 **NEVER use** `blue-600`, `blue-500`, `blue-50`, `blue-100`, `indigo-*`, `violet-*`, or any vibrant color as a primary UI element. **Blue is fully banned from this design system.**
+> 
+> ✅ **EXCEPTION**: The `/apps` page (`Apps.tsx`) uses coloured app icon backgrounds to represent third-party app brand identities. This is the **only** sanctioned exception. All page chrome, sidebar, header, and card backgrounds remain monochromatic.
 
 ### Typography
 
@@ -136,7 +162,7 @@ Every UI implementation **MUST** strictly follow these rules. Deviating from the
 
 The Navbar is a **floating, fixed-position glass capsule**. Always follow this implementation on EVERY SINGLE PAGE:
 
-**CRITICAL RULE**: EVERY component page in NovaSpace (from Dashboard to Workspaces, Teams, Settings, etc.) MUST implement this dynamically floating glass capsule header instead of a rigid layout top-bar. Even if a user-provided design reference mockup shows a flat or rigid 100vw header locked to the top edge, **OVERRIDE IT** and enforce the floating glass capsule aesthetic shown below.
+**CRITICAL RULE**: EVERY component page in NovaSpace (from Dashboard to Workspaces, Teams, Settings, AI Assistant, Notebooks, Apps, etc.) MUST implement this dynamically floating glass capsule header instead of a rigid layout top-bar.
 
 ```tsx
 <header className="fixed top-4 md:top-6 left-1/2 -translate-x-1/2 z-[100] w-full max-w-[calc(100%-48px)] md:max-w-6xl pointer-events-none transition-all duration-500">
@@ -146,10 +172,18 @@ The Navbar is a **floating, fixed-position glass capsule**. Always follow this i
 </header>
 ```
 
+For **dashboard-style pages with a collapsible sidebar**, the header shifts dynamically:
+```tsx
+<header className={`fixed top-4 md:top-6 transition-all duration-500 z-[100] px-3 md:px-4 flex justify-center ${
+  isSidebarOpen ? 'left-0 lg:left-64 right-0' : 'left-0 right-0'
+}`}>
+  <nav className={`w-full ${isSidebarOpen ? 'max-w-4xl' : 'max-w-5xl'} backdrop-blur-xl bg-white/70 border border-white/40 rounded-[2rem] ...`}>
+```
+
 - **Active link**: `text-slate-900 border-b-2 border-slate-900`
 - **Inactive links**: `text-slate-500 hover:text-slate-900`
-- **Buttons inside Header**: Use `bg-slate-900 text-white rounded-2xl` for primary action or `bg-white/50 border border-slate-200 rounded-xl` for secondary (NOT rounded-full)
-- **Mobile menu**: Glassmorphic `backdrop-blur-3xl bg-white/95` slide-down overlay with `<Menu>` / `<X>` toggle
+- **Buttons inside Header**: Use `bg-slate-900 text-white rounded-2xl` for primary or `bg-white/50 border border-slate-200 rounded-xl` for secondary
+- **Mobile menu**: Glassmorphic `backdrop-blur-3xl bg-white/95` slide-down overlay
 
 ### Spacing & Layout Conventions
 
@@ -164,18 +198,6 @@ The Navbar is a **floating, fixed-position glass capsule**. Always follow this i
 | Card padding           | `p-8` to `p-10`                             |
 | Shadow (light)         | `shadow-sm` on cards                        |
 | Shadow (premium)       | `shadow-2xl shadow-slate-100` on sections   |
-
-### Section Header Pattern
-
-All major sections use the shared `<SectionHeader>` component:
-```tsx
-<SectionHeader
-  badge="Label Text"
-  title="Main Heading Here"
-  description="Supporting descriptive copy goes here..."
-  centered={true} // or false for left-aligned
-/>
-```
 
 ### Icon Container Pattern
 ```tsx
@@ -218,45 +240,48 @@ const VideoBackground = ({ hlsSrc, mp4Src }) => {
 
 ---
 
+## AI Ecosystem — Architecture Notes
+
+### `/ai-assistant` (AIAssistant.tsx)
+- Multi-session chat with chat history sidebar
+- Model selector: **LLM** (Llama 3.1 8B), **Cerebras** (fast inference), **Search** (web results)
+- Welcome screen with 4 quick-action prompt cards
+- Typing indicator (bouncing dots animation)
+- Star/bookmark toggle on active chat
+- Sidebar bottom links: Apps → `/apps`, Notebooks → `/notebooks`, Dashboard → `/dashboard`
+
+### `/notebooks` (Notebooks.tsx)
+- Drag-and-drop file upload zone (PDF, DOC, DOCX, TXT, MD — max 50MB)
+- Document list in sidebar with status (processing → ready)
+- Per-document view with **Summary** tab and **AI Chat** tab
+- "Back to Chat" link → `/ai-assistant`
+
+### `/apps` (Apps.tsx)
+- 6 category tabs: Featured, Lifestyle, Productivity, Programming, Education, Business
+- **Featured banner** per category: gradient hero with icon, name, CTA button
+- 3-column app card grid (icon + name + description + arrow)
+- Cross-category live search
+- Sidebar bottom links: AI Assistant → `/ai-assistant`, Notebooks → `/notebooks`, Dashboard → `/dashboard`
+
+---
+
 ## Component Architecture
 
-All components in `src/App.tsx` follow a clean, flat, functional pattern. Props are typed inline with `any` for flexibility currently — when refactoring, add proper TypeScript interfaces.
+All components follow a clean, flat, functional pattern. Props are typed inline.
 
-### Existing Components
+### Existing Shared Components
 | Component       | Description                                                |
-|----------------|------------------------------------------------------------|
-| `<Navbar />`   | Top nav with logo, links, Log In & Sign Up buttons         |
-| `<Hero />`     | Full hero with headline, subtext, CTAs, and abstract graphic |
-| `<FeatureCard />` | Reusable card with icon, title, description, badge, and link |
-| `<Features />` | Grid layout of feature cards (2-up large + 4-up small)    |
-| `<MachineLearning />` | Stats section: 10x faster, 95% accuracy, 5hrs/week   |
-| `<SecurityCard />` | Inline security feature row with icon, title, badge    |
-| `<Security />` | Security section with compliance badges (SOC 2, ISO 27001, GDPR, HIPAA) |
-| `<Footer />`   | Multi-column footer with links and social icons            |
+|----------------|------------------------------------------------------------------------|
+| `<Navbar />`   | Public top nav with logo, links, Log In & Sign Up buttons (Home/About) |
+| `Sidebar`      | Per-page collapsible spring-animated sidebar (defined inline per page) |
+| `AppHeader`    | Per-page floating glass capsule header (defined inline per page)       |
 
-### Page Assembly (`App.tsx` default export)
-```tsx
-export default function App() {
-  return (
-    <div className="min-h-screen bg-white font-sans text-slate-900 selection:bg-blue-100">
-      <Navbar />
-      <main>
-        <Hero />
-        <Features />
-        <MachineLearning />
-        <Security />
-      </main>
-      <Footer />
-    </div>
-  );
-}
-```
+### Inline Component Pattern (Dashboard-style pages)
+Each dashboard page defines its own `Sidebar`, `AppHeader`, and content components **inline within the same file**. This keeps each page self-contained and avoids prop-drilling across files.
 
 ---
 
 ## Environment Variables
-
-Sensitive values are loaded from a `.env` file in the project root. See `.env.example` for the template.
 
 | Variable        | Used In              | Description                    |
 |----------------|----------------------|--------------------------------|
@@ -281,16 +306,22 @@ npm run clean    # Remove /dist directory
 ## Development Guidelines
 
 ### Adding New Components
-1. Define the component as a `const` arrow function in `src/App.tsx` (for simple additions).
-2. For larger features, create `src/components/ComponentName.tsx` and import it in `App.tsx`.
-3. Use Lucide React for all icons — browse available icons at [lucide.dev](https://lucide.dev).
+1. For new dashboard/AI pages, define `Sidebar`, `AppHeader`, and sub-components **inline** in the page file.
+2. For larger reusable modules, create `src/components/ComponentName.tsx` and import it.
+3. Use Lucide React for all icons — browse at [lucide.dev](https://lucide.dev).
 4. Use the `motion` library for animations: `import { motion } from 'motion/react'`.
 5. **Always check the Design System rules above before styling anything.**
 
-### Adding New Styles / Theme Tokens
-1. Open `src/index.css`.
-2. Add new CSS custom properties inside the `@theme {}` block.
-3. Do **not** create a `tailwind.config.js`.
+### Adding New Routes
+1. Create `src/pages/PageName.tsx`
+2. Import it in `src/App.tsx`
+3. Add `<Route path="/route-name" element={<PageName />} />` inside `<Routes>`
+4. Wire all existing `<a href="#">` references that should point to the new route
+
+### Navigation Rules
+- **ALL** internal navigation MUST use `<Link to="...">` from `react-router-dom`
+- **NEVER** use `<a href="...">` for internal routes — it causes a full page reload
+- When fixing "dead" nav buttons: check if they are `<button>` or `<a href="#">` and convert to `<Link>`
 
 ### Using the Gemini AI API
 - The API key is available at `process.env.GEMINI_API_KEY` at runtime (injected by Vite).
@@ -309,7 +340,7 @@ import MyComponent from '@/src/components/MyComponent'
 
 NovaSpace follows a **clean, editorial, premium minimalist** design:
 
-- **Monochromatic Only**: Strictly Black & White / Slate. No vibrant accent colours.
+- **Monochromatic Only**: Strictly Black & White / Slate. No vibrant accent colours (except app icon badges in `/apps`).
 - **Big typography**: Hero h1 is `text-5xl` to `text-7xl` with `leading-[1.1]`. Serif font for all headlines.
 - **Whitespace-heavy**: Large `py-20`–`py-32` section padding, generous `gap` values.
 - **Glassmorphism Navbar**: Floating pill/capsule with `backdrop-blur`, `bg-white/70`, border, and shadow.
@@ -321,7 +352,7 @@ NovaSpace follows a **clean, editorial, premium minimalist** design:
 
 ## 📱 Mobile Responsiveness — MANDATORY
 
-Every page and component **must** be fully responsive, from 320px (small phone) up to 1920px+ (large monitor). This is a non-negotiable requirement.
+Every page and component **must** be fully responsive, from 320px (small phone) up to 1920px+ (large monitor).
 
 ### Responsive Breakpoint Strategy
 
@@ -349,8 +380,8 @@ Every page and component **must** be fully responsive, from 320px (small phone) 
 6. **All paddings and margins must be smaller on mobile:**
    - Sections: `p-6 md:p-12`
    - Cards: `p-5 md:p-8`
-7. **Touch targets must be at least 44×44px**: All tappable elements (buttons, nav links, icons) must be comfortably tappable.
-8. **Text must never truncate or overflow** on narrow screens. Use `truncate`, `break-words`, or `min-w-0` on flex children as needed.
+7. **Touch targets must be at least 44×44px**.
+8. **Text must never truncate or overflow** on narrow screens.
 
 ### Dashboard Sidebar Pattern (Collapsible)
 
@@ -359,33 +390,35 @@ The dashboard uses a collapsible sidebar controlled by a `useState` boolean:
 ```tsx
 const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
-// Sidebar: uses AnimatePresence + motion.aside for slide-in/out
+// Sidebar: AnimatePresence + motion.aside for slide-in/out
 // On mobile: renders as an overlay with a backdrop blur
 // On desktop (lg+): renders inline, pushing main content
 
-// Main content adjusts padding dynamically:
-<main className={`transition-all duration-500 pt-32 ${isSidebarOpen ? 'lg:pl-72' : 'pl-0'}`}>
+// Main content adjusts margin dynamically:
+<div className={`flex-1 flex flex-col transition-all duration-500 ${isSidebarOpen ? 'lg:ml-64' : 'ml-0'}`}>
 ```
 
 - Mobile: sidebar is an **overlay** on top of content (with `z-[200]` and backdrop `z-[150]`)
-- Desktop: sidebar **pushes** the main content to the right (`lg:pl-72`)
+- Desktop: sidebar **pushes** the main content to the right (`lg:ml-64`)
 - The toggle button (`<Menu />` icon) must always be visible in the header
 
 ### Auth Pages (Login / Signup) Responsive Pattern
 
 - **Desktop (lg+):** Split-screen layout — 45% dark branding panel left, 55% form right
-- **Mobile:** The dark panel is completely hidden (`hidden lg:flex`). Only the form is shown, with the brand logo shown at the top of the form instead.
+- **Mobile:** The dark panel is completely hidden (`hidden lg:flex`). Only the form is shown.
 - Form containers must be `w-full max-w-[420px]` (login) or `max-w-[500px]` (signup) and centered.
 
 ---
 
 ## Known Patterns & Gotchas
 
-- **HMR**: Hot Module Replacement is conditionally disabled via `DISABLE_HMR=true` env var (for AI Studio). Do not modify the HMR config in `vite.config.ts`.
-- **Tailwind v4 vs v3**: This project uses **Tailwind v4** — many v3 guides will be wrong. There is no `purge`, no `content` array, no `tailwind.config.js`. Configuration is entirely CSS-first via `@theme` in `src/index.css`.
+- **HMR**: Hot Module Replacement is conditionally disabled via `DISABLE_HMR=true` env var. Do not modify the HMR config in `vite.config.ts`.
+- **Tailwind v4 vs v3**: This project uses **Tailwind v4** — no `purge`, no `content` array, no `tailwind.config.js`. Configuration is entirely CSS-first via `@theme` in `src/index.css`.
 - **`react-dom` is `^19.0.0`**: Ensure any third-party component libraries are React 19 compatible before installing.
-- **Routing**: This project uses `react-router-dom`. All navigation must use `<Link to="...">` or `useNavigate()`. Never use `<a href>` for internal navigation.
-- **Navbar is `fixed` positioned**: Remember to add `pt-24` or equivalent top-padding to the `<main>` element or the first section if content gets hidden behind the nav.
-- **Dashboard Navbar**: The dashboard uses a floating capsule nav (same design as Home) that dynamically adjusts its left position based on sidebar state.
-- **Design Drift**: The #1 risk on this project. When in doubt, refer to the Design System rules in this file — especially the colour palette. Blue/purple/any colour = WRONG.
+- **Routing**: This project uses `react-router-dom`. All navigation must use `<Link to="...">` or `useNavigate()`. **Never use `<a href>` for internal navigation.**
+- **Navbar is `fixed` positioned**: Remember to add `pt-24` or `pt-28` top-padding to the first content element so it isn't hidden behind the nav.
+- **Dashboard Navbar**: The dashboard uses a floating capsule nav that dynamically adjusts its left position based on sidebar state (`left-0 lg:left-64` when open).
+- **Design Drift**: The #1 risk on this project. When in doubt, refer to the Design System rules — especially the colour palette. Blue/purple/any colour = WRONG (except app icons in `/apps`).
 - **Missing Icon Imports**: Always double-check that every Lucide icon used in JSX is included in the import statement. Missing imports cause silent blank screens.
+- **Key prop on Components**: When using `AnimatePresence` with custom components, place `key` on a `<React.Fragment key={...}>` wrapper rather than directly on the component to avoid TypeScript prop-type errors.
+- **Dead navigation buttons**: If a sidebar or header button does nothing when clicked, it is likely a plain `<button>` or `<a href="#">` that needs to be converted to a `<Link to="...">`.
